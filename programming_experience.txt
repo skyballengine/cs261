@@ -1,0 +1,16 @@
+
+I have limited with experience with C++, Java, MASM and Javascript and then more extensive experience with Python.
+I have also been studying the Bash shell language as well as SQL, though I suppose the latter is not considered to be a
+programming language, but a query language.
+
+With C++, Java, and MASM, I spent about 3 months with each language for their respective college courses. With Javascript, I'm
+currently taking CS291 which uses Javascript, but I have taken several online courses in Javascript that were
+project-based. I have been learning Javascript on and off for the past 3 or 4 years, but have not attempted more
+involved programs using Javascript. I started learning programming in Python about 5 years ago and have undertaken more
+involved projects (relatively speaking :) ) and have a couple personal projects that I'm working on using Python.
+
+As for the IDE's, I used Visual Studio for C++, Eclipse for Java, Visual Studio for MASM, VSCode for Javascript, and
+VSCode, Pycharm, and Anaconda for Python.
+
+Within my university related courses, I have taken 4 programming related courses in Python, 1 in C++, 1 in Java, and 1
+in MASM, as well as 1 in Javascript. I have taken several MOOCS in Javascript and quite a few in Python.
