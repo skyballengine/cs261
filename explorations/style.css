@@ -1,0 +1,11 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+table { 
+    border: 3px solid gray;
+    width: 100%;
+}
+th, td { 
+    border: 2px solid wheat;
+}
