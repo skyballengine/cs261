@@ -31,9 +31,29 @@ def min_max(arr: StaticArray) -> (int, int):
 
 def fizz_buzz(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    Receives a StaticArray of integers and returns a new StaticArray object
+    with the content of the original array modified if certain conditions are met:
+    1. If the number in the original array is divisible by 3, the corresponding element in the
+    new array will be the string ‘fizz’.
+    2. If the number in the original array is divisible by 5, the corresponding element in the
+    new array will be the string ‘buzz’.
+    3. If the number in the original array is both a multiple of 3 and a multiple of 5, the
+    corresponding element in the new array will be the string ‘fizzbuzz’.
+    4. In all other cases, the element in the new array will have the same value as in the
+    original array.
     """
-    pass
+    new_sa_arr = StaticArray(arr.length())
+    for n in range(arr.length()):
+        if arr[n] % 15 == 0:
+            new_sa_arr[n] = 'fizzbuzz'
+        elif arr[n] % 3 == 0:
+            new_sa_arr[n] = 'fizz'
+        elif arr[n] % 5 == 0:
+            new_sa_arr[n] = 'buzz'
+        else:
+            new_sa_arr[n] = arr[n]
+    return new_sa_arr
+
 
 
 # ------------------- PROBLEM 3 - REVERSE -----------------------------------
