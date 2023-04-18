@@ -1,9 +1,9 @@
-# Name:
-# OSU Email:
+# Name: Eusebius Ballentine
+# OSU Email: ballente@oregonstate.edu
 # Course: CS261 - Data Structures
-# Assignment:
-# Due Date:
-# Description:
+# Assignment: 1
+# Due Date: 4-26-23
+# Description: Python Fundamentals Review
 
 
 import random
@@ -14,9 +14,17 @@ from static_array import *
 
 def min_max(arr: StaticArray) -> (int, int):
     """
-    TODO: Write this implementation
+    Function returns min and max of StaticArray
     """
-    pass
+    sa_min = arr[0]
+    sa_max = arr[0]
+    for i in range(arr.length()):
+        if arr[i] < sa_min:
+            sa_min = arr[i]
+    for j in range(arr.length()):
+        if arr[j] > sa_max:
+            sa_max = arr[j]
+    return sa_min, sa_max
 
 
 # ------------------- PROBLEM 2 - FIZZ_BUZZ ---------------------------------
