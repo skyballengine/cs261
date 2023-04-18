@@ -1,6 +1,6 @@
 import unittest
 from static_array import StaticArray
-from assignment1 import min_max, fizz_buzz
+from assignment1 import min_max, fizz_buzz, reverse
 
 
 class Assignment1Tester(unittest.TestCase):
@@ -28,3 +28,14 @@ class Assignment1Tester(unittest.TestCase):
         self.assertEqual(result[1], 'buzz')
         self.assertEqual(result[2], 'fizz')
         self.assertEqual(result[9], 'fizzbuzz')
+
+    def test_reverse(self):
+        ls = [_ for _ in range(-10, 10, 2)]
+        print(ls)
+        sa_arr = StaticArray(len(ls))
+        for i, value in enumerate(ls):
+            sa_arr[i] = value
+        print(sa_arr)
+        reverse(sa_arr)
+        print(sa_arr)
+        self.assertEqual(sa_arr._data, reverse(ls))

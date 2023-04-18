@@ -60,9 +60,15 @@ def fizz_buzz(arr: StaticArray) -> StaticArray:
 
 def reverse(arr: StaticArray) -> None:
     """
-    TODO: Write this implementation
+    Receives a StaticArray and reverses the order of the elements in the
+    array, the reversal must be done ‘in place’
     """
-    pass
+    j = arr.length() - 1
+    for i in range(arr.length()//2):
+        temp = arr[i]
+        arr[i] = arr[j-i]
+        arr[j-i] = temp
+
 
 
 # ------------------- PROBLEM 4 - ROTATE ------------------------------------
