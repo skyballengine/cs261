@@ -88,19 +88,19 @@ def rotate(arr: StaticArray, steps: int) -> StaticArray:
 
     if steps > 0:
         j = 0
-        for i in range(len_arr - sa_steps, len_arr):
+        for i in range((len_arr - sa_steps) % len_arr, len_arr):
             sa_array[j] = arr[i]
             j += 1
-        for i in range(0, len_arr - sa_steps):
+        for i in range(0, (len_arr - sa_steps) % len_arr):
             sa_array[j] = arr[i]
             j += 1
 
     if steps < 0:
         j = 0
-        for i in range(sa_steps, len_arr):
+        for i in range(sa_steps % len_arr, len_arr):
             sa_array[j] = arr[i]
             j += 1
-        for i in range(0, sa_steps):
+        for i in range(0, sa_steps % len_arr):
             sa_array[j] = arr[i]
             j += 1
 
@@ -111,9 +111,16 @@ def rotate(arr: StaticArray, steps: int) -> StaticArray:
 
 def sa_range(start: int, end: int) -> StaticArray:
     """
-    TODO: Write this implementation
+    Receives the two integers start and end, and returns a StaticArray that
+    contains all the consecutive integers between start and end (inclusive).
     """
-    pass
+    sa_array = StaticArray(end - start + 1)
+    j = start
+    for i in range(sa_array.length()):
+        sa_array.set(i, j)
+        j += 1
+    return sa_array
+
 
 
 # ------------------- PROBLEM 6 - IS_SORTED ---------------------------------

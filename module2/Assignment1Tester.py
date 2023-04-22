@@ -1,6 +1,6 @@
 import unittest
 from static_array import StaticArray
-from assignment1 import min_max, fizz_buzz, reverse, rotate
+from assignment1 import min_max, fizz_buzz, reverse, rotate, sa_range
 
 
 class Assignment1Tester(unittest.TestCase):
@@ -70,3 +70,6 @@ class Assignment1Tester(unittest.TestCase):
             print(f'{rotate(arr, steps)} {space} {steps}')
         print(arr)
 
+    def test_sa_range(self):
+        result = sa_range(1, 18)
+        print(result)
