@@ -73,3 +73,11 @@ class Assignment1Tester(unittest.TestCase):
     def test_sa_range(self):
         result = sa_range(1, 18)
         print(result)
+        result_2 = sa_range(-1, 2)
+        print(result_2)
+        result_3 = sa_range(0, 0)
+        print(result_3)
+        result_4 = sa_range(-1202, -1206)
+        print(result_4)
+        result_5 = sa_range(0, -3)
+        print(result_5)

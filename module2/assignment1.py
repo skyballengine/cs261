@@ -114,11 +114,35 @@ def sa_range(start: int, end: int) -> StaticArray:
     Receives the two integers start and end, and returns a StaticArray that
     contains all the consecutive integers between start and end (inclusive).
     """
-    sa_array = StaticArray(end - start + 1)
-    j = start
-    for i in range(sa_array.length()):
-        sa_array.set(i, j)
-        j += 1
+    if start == end:
+        sa_array = StaticArray(1)
+        sa_array.set(0, start)
+        return sa_array
+
+    sa_array = StaticArray(abs(end - start) + 1)
+    # if start < 0 and end < 0:
+    #     if end > start:
+    #         j = start
+    #         for i in range(sa_array.length()):
+    #             sa_array.set(i, j)
+    #             j += 1
+    #     if end < start:
+    #         j = start
+    #         for i in range(sa_array.length()):
+    #             sa_array.set(i, j)
+    #             j -= 1
+    #     return sa_array
+
+    if end > start:
+        j = start
+        for i in range(sa_array.length()):
+            sa_array.set(i, j)
+            j += 1
+    if end < start:
+        j = start
+        for i in range(sa_array.length()):
+            sa_array.set(i, j)
+            j -= 1
     return sa_array
 
 
@@ -127,7 +151,12 @@ def sa_range(start: int, end: int) -> StaticArray:
 
 def is_sorted(arr: StaticArray) -> int:
     """
-    TODO: Write this implementation
+    Receives a StaticArray and returns an integer that describes whether
+    the array is sorted. The method must return:
+    ● 1 if the array is sorted in strictly ascending order.
+    ● -1 if the list is sorted in strictly descending order.
+    ● 0 otherwise.
+    Arrays consisting of a single element are considered sorted in strictly ascending order.
     """
     pass
 
