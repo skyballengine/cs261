@@ -1,6 +1,6 @@
 import unittest
 from static_array import StaticArray
-from assignment1 import min_max, fizz_buzz, reverse
+from assignment1 import min_max, fizz_buzz, reverse, rotate
 
 
 class Assignment1Tester(unittest.TestCase):
@@ -39,3 +39,20 @@ class Assignment1Tester(unittest.TestCase):
         reverse(sa_arr)
         print(sa_arr)
         self.assertEqual(sa_arr._data, reverse(ls))
+
+
+    def test_rotate(self):
+        ls = [_ for _ in range(-10, 10, 2)]
+        print(ls)
+        sa_arr = StaticArray(len(ls))
+        for i, value in enumerate(ls):
+            sa_arr[i] = value
+        print(sa_arr)
+        result = rotate(sa_arr, 2)
+        print(result)
+        sa_arr_2 = StaticArray(len(ls))
+        for i, value in enumerate(ls):
+            sa_arr_2[i] = value
+        result_2 = rotate(sa_arr_2, -2)
+        print(result_2)
+

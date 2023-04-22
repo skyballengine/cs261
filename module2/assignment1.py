@@ -75,9 +75,33 @@ def reverse(arr: StaticArray) -> None:
 
 def rotate(arr: StaticArray, steps: int) -> StaticArray:
     """
-    TODO: Write this implementation
+    Receives two parameters - a StaticArray and an integer value (called
+    steps). The function will create and return a new StaticArray, which contains all of the
+    elements from the original array, but their position has shifted right or left steps number of
+    times.
     """
-    pass
+    sa_steps = abs(steps)
+    len_arr = arr.length()
+    sa_array = StaticArray(len_arr)
+    if steps > 0:
+        j = 0
+        for i in range(len_arr - sa_steps, len_arr):
+            sa_array[j] = arr[i]
+            j += 1
+        for i in range(0, len_arr - sa_steps):
+            sa_array[j] = arr[i]
+            j += 1
+
+    if steps < 0:
+        j = 0
+        for i in range(sa_steps, len_arr):
+            sa_array[j] = arr[i]
+            j += 1
+        for i in range(0, sa_steps):
+            sa_array[j] = arr[i]
+            j += 1
+
+    return sa_array
 
 
 # ------------------- PROBLEM 5 - SA_RANGE ----------------------------------
