@@ -83,6 +83,9 @@ def rotate(arr: StaticArray, steps: int) -> StaticArray:
     sa_steps = abs(steps)
     len_arr = arr.length()
     sa_array = StaticArray(len_arr)
+    if steps == 0:
+        return arr
+
     if steps > 0:
         j = 0
         for i in range(len_arr - sa_steps, len_arr):

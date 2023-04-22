@@ -56,3 +56,17 @@ class Assignment1Tester(unittest.TestCase):
         result_2 = rotate(sa_arr_2, -2)
         print(result_2)
 
+    def test_rotate_2(self):
+        source = [_ for _ in range(-20, 20, 7)]
+        arr = StaticArray(len(source))
+        for i, value in enumerate(source):
+            arr.set(i, value)
+        print(arr)
+        for steps in [1, 2, 0, -1, -2]:  # 28, -100, 2 ** 28, -2 ** 31]:
+            if steps >= 0:
+                space = " "
+            else:
+                space = ""
+            print(f'{rotate(arr, steps)} {space} {steps}')
+        print(arr)
+
