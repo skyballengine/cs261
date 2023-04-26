@@ -16,14 +16,18 @@ def min_max(arr: StaticArray) -> (int, int):
     """
     Function returns min and max of StaticArray
     """
+    # min and max both start as the first element of the static array
     sa_min = arr[0]
     sa_max = arr[0]
+    # loop through to find min
     for i in range(arr.length()):
         if arr[i] < sa_min:
             sa_min = arr[i]
+    # loop through to find max
     for j in range(arr.length()):
         if arr[j] > sa_max:
             sa_max = arr[j]
+
     return sa_min, sa_max
 
 
@@ -42,8 +46,11 @@ def fizz_buzz(arr: StaticArray) -> StaticArray:
     4. In all other cases, the element in the new array will have the same value as in the
     original array.
     """
+    # create a new static array with the length of arr
     new_sa_arr = StaticArray(arr.length())
+    # loop through to check if values are divisible by 15, 3, and 5 using modulo
     for n in range(arr.length()):
+        # check 15 first
         if arr[n] % 15 == 0:
             new_sa_arr[n] = 'fizzbuzz'
         elif arr[n] % 3 == 0:
@@ -51,9 +58,9 @@ def fizz_buzz(arr: StaticArray) -> StaticArray:
         elif arr[n] % 5 == 0:
             new_sa_arr[n] = 'buzz'
         else:
+            # simply add the value
             new_sa_arr[n] = arr[n]
     return new_sa_arr
-
 
 
 # ------------------- PROBLEM 3 - REVERSE -----------------------------------
@@ -63,12 +70,14 @@ def reverse(arr: StaticArray) -> None:
     Receives a StaticArray and reverses the order of the elements in the
     array, the reversal must be done ‘in place’
     """
+    # give j the value of the last index
     j = arr.length() - 1
-    for i in range(arr.length()//2):
+    # range should be divided by 2, swap will happen 1/2 as many times as the length of arr
+    for i in range(arr.length() // 2):
+        # swap
         temp = arr[i]
-        arr[i] = arr[j-i]
-        arr[j-i] = temp
-
+        arr[i] = arr[j - i]
+        arr[j - i] = temp
 
 
 # ------------------- PROBLEM 4 - ROTATE ------------------------------------
@@ -80,26 +89,42 @@ def rotate(arr: StaticArray, steps: int) -> StaticArray:
     elements from the original array, but their position has shifted right or left steps number of
     times.
     """
+    # sa_steps makes steps a positive integer
     sa_steps = abs(steps)
     len_arr = arr.length()
     sa_array = StaticArray(len_arr)
+
+    # if no steps return arr
     if steps == 0:
         return arr
 
+    # if steps is positive
+    # use modulo for larger numbers
+    # star
     if steps > 0:
+        # use j as index for sa_array
         j = 0
+        # build sa_array in two parts
+        # part 1
         for i in range((len_arr - sa_steps) % len_arr, len_arr):
             sa_array[j] = arr[i]
             j += 1
+        # part 2
         for i in range(0, (len_arr - sa_steps) % len_arr):
             sa_array[j] = arr[i]
             j += 1
 
+    # if steps is negative
+    # use modulo for larger numbers
     if steps < 0:
+        # use j as index for sa_array
         j = 0
+        # build sa_array in two parts
+        # part 1
         for i in range(sa_steps % len_arr, len_arr):
             sa_array[j] = arr[i]
             j += 1
+        # part 2
         for i in range(0, sa_steps % len_arr):
             sa_array[j] = arr[i]
             j += 1
@@ -114,37 +139,29 @@ def sa_range(start: int, end: int) -> StaticArray:
     Receives the two integers start and end, and returns a StaticArray that
     contains all the consecutive integers between start and end (inclusive).
     """
+    # if start and end are equal, sa_array has a single value
     if start == end:
         sa_array = StaticArray(1)
         sa_array.set(0, start)
         return sa_array
 
+    # if start and end are not equal, take absolute value of the difference + 1 as length of sa_array
     sa_array = StaticArray(abs(end - start) + 1)
-    # if start < 0 and end < 0:
-    #     if end > start:
-    #         j = start
-    #         for i in range(sa_array.length()):
-    #             sa_array.set(i, j)
-    #             j += 1
-    #     if end < start:
-    #         j = start
-    #         for i in range(sa_array.length()):
-    #             sa_array.set(i, j)
-    #             j -= 1
-    #     return sa_array
 
+    # if end greater than start, j will increment
     if end > start:
         j = start
         for i in range(sa_array.length()):
             sa_array.set(i, j)
             j += 1
+
+    # if end greater than start, j will decrement
     if end < start:
         j = start
         for i in range(sa_array.length()):
             sa_array.set(i, j)
             j -= 1
     return sa_array
-
 
 
 # ------------------- PROBLEM 6 - IS_SORTED ---------------------------------
@@ -158,43 +175,176 @@ def is_sorted(arr: StaticArray) -> int:
     ● 0 otherwise.
     Arrays consisting of a single element are considered sorted in strictly ascending order.
     """
-    pass
+    arr_len = arr.length()
+    # check if arr has a length of 1, if so return 1
+    if arr_len == 1:
+        return 1
+
+    # check if first element is less than last element
+    if arr[0] < arr[arr_len - 1]:
+        for i in range(arr_len - 1):
+            if arr.get(i) < arr.get(i + 1):
+                continue
+            else:
+                return 0
+        return 1
+
+    # check if first element is greater than last element
+    if arr[0] > arr[arr_len - 1]:
+        for i in range(arr_len - 1):
+            if arr.get(i) > arr.get(i + 1):
+                continue
+            else:
+                return 0
+        return -1
 
 
 # ------------------- PROBLEM 7 - FIND_MODE -----------------------------------
 
 def find_mode(arr: StaticArray) -> (int, int):
     """
-    TODO: Write this implementation
+    Receives a StaticArray that is sorted in order, either non-descending or
+    non-ascending. The function will return, in this order, the mode (most-occurring value) of
+    the array, and its frequency (how many times it appears).
+    If there is more than one value that has the highest frequency, select the one that occurs
+    first in the array.
     """
-    pass
+    # assign variable: element to first element of arr
+    element = arr[0]
+
+    # assign variable: count to 1 because that is the minimum if the element is in arr
+    count = 1
+    # assign tuple: mode to first element with a count of 1
+    mode = (element, count)
+
+    # if arr length is 1, then that is the mode
+    if arr.length() == 1:
+        return mode
+
+    # assign variable: arr_len to arr.length() and use nested loop (I know I'm not supposed to, lol)
+    arr_len = arr.length()
+    for i in range(arr_len):
+        # for each iteration count begins with 1
+        count = 1
+        # for each element starting with variable: i, check if next element is equal, else break
+        # count tracks number of occurrences
+        for j in range(i, arr_len - 1):
+            if arr[i] == arr[j + 1]:
+                count += 1
+            else:
+                break
+        # if current mode count is less than current count, then assign var: element to arr[i]
+        # and redefine var: mode with new count value
+        if mode[1] < count:
+            element = arr[i]
+            mode = (element, count)
+    return mode
 
 
 # ------------------- PROBLEM 8 - REMOVE_DUPLICATES -------------------------
 
 def remove_duplicates(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    Receives a StaticArray that is already in sorted order, either
+    non-descending or non-ascending. The function will return a new StaticArray with all
+    duplicate values removed. The original array must not be modified.
     """
-    pass
+    arr_len = arr.length()
+
+    # if length of arr is 1, initialize static array with length of 1 and single element of arr
+    if arr_len == 1:
+        sa_array = StaticArray(arr_len)
+        sa_array.set(0, arr[0])
+        return sa_array
+
+    # var: count used to track occurrences of the value that each element holds
+    count = 0
+    for i in range(arr_len - 1):
+        # increment var: count when the current element does not equal the following element
+        if arr[i] != arr[i + 1]:
+            count += 1
+    # initialize static array with var: count number of elements + 1 to account for last element not counted
+    sa_array = StaticArray(count + 1)
+    # var: j to track indices of sa_array to set elements with values
+    j = 0
+    for i in range(arr_len - 1):
+        if arr[i] != arr[i + 1]:
+            sa_array.set(j, arr[i])
+            j += 1
+    # set last value that omitted from checks because of loop range
+    sa_array.set(sa_array.length() - 1, arr[arr_len - 1])
+    return sa_array
 
 
 # ------------------- PROBLEM 9 - COUNT_SORT --------------------------------
 
 def count_sort(arr: StaticArray) -> StaticArray:
     """
-    TODO: Write this implementation
+    Receives a StaticArray and returns a new StaticArray with the same
+    content sorted in non-ascending order, using the count sort algorithm. The original array
+    must not be modified.
     """
-    pass
+
+    arr_len = arr.length()
+
+    # get min and max values
+    min_and_max = min_max(arr)
+
+    # build static array with function: sa_range from max to min (descending)
+    sa_range_array = sa_range(min_and_max[1], min_and_max[0])
+    count_sa_array = StaticArray(sa_range_array.length())
+    final_sa_array = StaticArray(arr_len)
+
+    for i in range(sa_range_array.length()):
+        count = 0
+        for j in range(arr_len):
+            if arr[j] == sa_range_array[i]:
+                count += 1
+        count_sa_array[i] = count
+
+    final_sa_array_index = 0
+
+    for k in range(count_sa_array.length()):
+        if count_sa_array[k] > 0:
+            for p in range(count_sa_array[k]):
+                final_sa_array.set(final_sa_array_index, sa_range_array[k])
+                final_sa_array_index += 1
+
+    return final_sa_array
+
 
 
 # ------------------- PROBLEM 10 - TRANSFORM_STRING ---------------------------
 
 def transform_string(source: str, s1: str, s2: str) -> str:
     """
-    TODO: Write this implementation
+    Receives three strings (source, s1, and s2) and returns a modified
+    string that is the same length as source. The source string should be processed one
+    character at a time, and the output string should be constructed according to these rules:
+    1) If the character from the source string is present in s1 (any index), it should be
+    replaced by the character at that same index in s2.
+    2) Otherwise, if the character is:
+    a) An uppercase letter -> replace with ' ' (a space)
+    b) A lowercase letter -> replace with '#'
+    c) A digit -> replace with '!'
+    d) Anything else -> replace with '='
     """
-    pass
+    # initialize new empty string
+    new_str = ''
+    # loop through var: source string checking for conditions and concatenating onto var: new_str
+    for i in range(len(source)):
+        if source[i] in s1:
+            s1_index = s1.index(source[i])
+            new_str += s2[s1_index]
+        elif source[i].isupper():
+            new_str += " "
+        elif source[i].islower():
+            new_str += '#'
+        elif source[i].isdigit():
+            new_str += '!'
+        else:
+            new_str += '='
+    return new_str
 
 
 # ------------------- BASIC TESTING -----------------------------------------
