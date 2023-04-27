@@ -38,7 +38,7 @@ class Dynamic_Array:
         self.data = new_sa
 
 # Create new instance of Dynamic_Array
-my_list = Dynamic_Array()
+my_list = Dynamic_Array([3, 5, 4, 6])
 
 # Build list with 10 items
 for i in range(12):
