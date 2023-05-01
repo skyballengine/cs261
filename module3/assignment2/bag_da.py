@@ -47,7 +47,8 @@ class Bag:
         Adds a new element to the bag. It must be implemented with O(1) amortized
         runtime complexity.
         """
-        pass
+        self._da.append(value)
+
 
     def remove(self, value: object) -> bool:
         """
@@ -55,21 +56,30 @@ class Bag:
         object. It returns True if some object was actually removed from the bag. Otherwise, it
         returns False. This method must be implemented with O(N) runtime complexity.
         """
-        pass
+        for i in range(self._da.length()):
+            if self._da.get_at_index(i) == value:
+                self._da.remove_at_index(i)
+                return True
+        return False
+
 
     def count(self, value: object) -> int:
         """
         Returns the number of elements in the bag that match the provided value
         object. It must be implemented with O(N) runtime complexity.
         """
-        pass
+        count = 0
+        for i in range(self._da.length()):
+            if self._da.get_at_index(i) == value:
+                count += 1
+        return count
 
     def clear(self) -> None:
         """
         Clears the contents of the bag. It must be implemented with O(1) runtime
         complexity.
         """
-        pass
+        self._da = DynamicArray()
 
     def equal(self, second_bag: "Bag") -> bool:
         """
@@ -82,7 +92,20 @@ class Bag:
         nor sort either bag. The runtime complexity of this implementation should be no greater
         than O(N2).
         """
-        pass
+        if self._da.is_empty() and second_bag._da.is_empty():
+            return True
+
+        if self._da.length() != second_bag._da.length():
+            return False
+
+        for i in range(self._da.length()):
+            flag = False
+            for j in range(second_bag._da.length()):
+                if self._da[i] == second_bag._da.get_at_index(j):
+                    flag = True
+            if not flag:
+                return False
+        return True
 
     def __iter__(self):
         """
@@ -93,13 +116,22 @@ class Bag:
         You can use either of the two models demonstrated in the Exploration - you can build the
         iterator functionality inside the Bag, or you can create a separate iterator class
         """
-        pass
+        self._index = 0
+        return self
 
     def __next__(self):
         """
-        TODO: Write this implementation
+        Return the next item in the Bag, based on the current location of the
+        iterator.
         """
-        pass
+        try:
+            value = self._da.get_at_index(self._index)
+
+        except DynamicArrayException:
+            raise StopIteration
+
+        self._index += 1
+        return value
 
 
 # ------------------- BASIC TESTING -----------------------------------------

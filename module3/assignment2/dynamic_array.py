@@ -256,11 +256,14 @@ class DynamicArray:
         """
         if initializer is None:
             initializer = self._data[0]
+            for i in range(self.length() - 1):
+                initializer = reduce_func(initializer, self._data[i + 1])
+            return initializer
         if self.is_empty():
             return initializer
-        for i in range(self._data.length()):
-            if not self._data[i] is None:
-                initializer += self._data[i]
+        initializer = reduce_func(initializer, self._data[0])
+        for i in range(self.length()-1):
+            initializer = reduce_func(initializer, self._data[i + 1])
         return initializer
 
 
@@ -275,7 +278,41 @@ def find_mode(arr: DynamicArray) -> (DynamicArray, int):
     should be included in the array being returned in the order in which they appear in the input
     array. If there is only one mode, only that value should be included.
     """
-    pass
+    # mode dynamic array
+    mode_da = DynamicArray()
+
+    # assign variable: element to first element of arr
+    element = arr[0]
+
+    # assign variable: count to 1 because that is the minimum if the element is in arr
+    count = 1
+    # assign tuple: mode to first element with a count of 1
+    mode = (element, count)
+
+    # if arr length is 1, then that is the mode
+    if arr.length() == 1:
+        return mode
+        # assign variable: arr_len to arr.length() and use nested loop (I know I'm not supposed to, lol)
+    arr_len = arr.length()
+    for i in range(arr_len):
+        # for each iteration count begins with 1
+        count = 1
+        # for each element starting with variable: i, check if next element is equal, else break
+        # count tracks number of occurrences
+        for j in range(i, arr_len - 1):
+            if arr[i] == arr[j + 1]:
+                count += 1
+            else:
+                break
+
+        # if current mode count is less than current count, then assign var: element to arr[i]
+        # and redefine var: mode with new count value
+        if mode[1] < count:
+            element = arr[i]
+            mode = (element, count)
+    mode_da.append(mode[0])
+    return mode_da, mode[1]
+
 
 
 # ------------------- BASIC TESTING -----------------------------------------
