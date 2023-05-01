@@ -67,4 +67,45 @@ class Assignment2Tester(unittest.TestCase):
         da.merge(new_da)
         print(da)
 
+    def test_map(self):
+        da = DynamicArray([_ for _ in range(10)])
+        print(da)
+        print(da._data)
+        def add_1(element):
+            element += 1
+            return element
+
+        new_da_2 = DynamicArray()
+        result = da.map(lambda x: (x ** 2))
+        print(result)
+        print(result._data)
+        result_2 = result.map(add_1)
+        print(result_2)
+
+    def test_filter(self):
+        def is_cool(element):
+            if element < 5:
+                return False
+            else:
+                return True
+        da = DynamicArray([_ for _ in range(10)])
+        print(da)
+        print(da._data)
+        result = da.filter(is_cool)
+        print(result)
+
+        def is_long_word(word, length):
+            return len(word) > length
+
+        da = DynamicArray("This is a sentence with some long words".split())
+        print(da)
+        for length in [3, 4, 7]:
+            print(da.filter(lambda word: is_long_word(word, length)))
+
+    def test_reduce(self):
+        values = [100, 5, 10, 15, 20, 25]
+        da = DynamicArray(values)
+        print(da)
+        print(da.reduce(lambda x, y: (x // 5 + y ** 2)))
+        print(da.reduce(lambda x, y: (x + y ** 2), -1))
 

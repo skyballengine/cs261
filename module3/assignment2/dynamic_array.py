@@ -228,24 +228,52 @@ class DynamicArray:
         Creates a new dynamic array where the value of each element is derived by
         applying a given map_func to the corresponding value from the original array.
         """
-        pass
+        new_da_array = DynamicArray()
+        for i in range(self._data.length()):
+            if not self._data[i] is None:
+                new_element = map_func(self._data[i])
+                new_da_array.append(new_element)
+        return new_da_array
 
     def filter(self, filter_func) -> "DynamicArray":
         """
-        TODO: Write this implementation
+        Creates a new dynamic array populated only with those elements from the
+        original array for which filter_func returns True.
         """
-        pass
+        new_da_array = DynamicArray()
+        for i in range(self._data.length()):
+            if not self._data[i] is None:
+                result = filter_func(self._data[i])
+                new_da_array.append(result)
+        return new_da_array
 
     def reduce(self, reduce_func, initializer=None) -> object:
         """
-        TODO: Write this implementation
+        Sequentially applies the reduce_func to all elements of the dynamic array and
+        returns the resulting value. It takes an optional initializer parameter. If this parameter is not
+        provided, the first value in the array is used as the initializer. If the dynamic array is empty,
+        the method returns the value of the initializer (or None, if one was not provided).
         """
-        pass
+        if initializer is None:
+            initializer = self._data[0]
+        if self.is_empty():
+            return initializer
+        for i in range(self._data.length()):
+            if not self._data[i] is None:
+                initializer += self._data[i]
+        return initializer
 
 
 def find_mode(arr: DynamicArray) -> (DynamicArray, int):
     """
-    TODO: Write this implementation
+    Write a standalone function outside of the DynamicArray class that receives a dynamic array
+    already in sorted order, either non-descending or non-ascending. The function will return a
+    tuple containing (in this order) a dynamic array comprising the mode (most-occurring)
+    value/s of the array, and an integer that represents the highest frequency (how many times
+    they appear).
+    If there is more than one value that has the highest frequency, all values at that frequency
+    should be included in the array being returned in the order in which they appear in the input
+    array. If there is only one mode, only that value should be included.
     """
     pass
 

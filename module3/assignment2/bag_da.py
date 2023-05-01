@@ -44,37 +44,54 @@ class Bag:
 
     def add(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new element to the bag. It must be implemented with O(1) amortized
+        runtime complexity.
         """
         pass
 
     def remove(self, value: object) -> bool:
         """
-        TODO: Write this implementation
+        Removes any one element from the bag that matches the provided value
+        object. It returns True if some object was actually removed from the bag. Otherwise, it
+        returns False. This method must be implemented with O(N) runtime complexity.
         """
         pass
 
     def count(self, value: object) -> int:
         """
-        TODO: Write this implementation
+        Returns the number of elements in the bag that match the provided value
+        object. It must be implemented with O(N) runtime complexity.
         """
         pass
 
     def clear(self) -> None:
         """
-        TODO: Write this implementation
+        Clears the contents of the bag. It must be implemented with O(1) runtime
+        complexity.
         """
         pass
 
     def equal(self, second_bag: "Bag") -> bool:
         """
-        TODO: Write this implementation
+        Compares the contents of a bag with the contents of a second bag provided as
+        a parameter. The method returns True if the bags are equal (contain the same number of
+        elements, and also contain the same elements without regard to the order of elements).
+        Otherwise, it returns False. An empty bag is only considered equal to another empty bag.
+        This method must not change the contents of either bag. You are allowed to directly access
+        all instance variables of second_bag, but you may not create any additional data structures,
+        nor sort either bag. The runtime complexity of this implementation should be no greater
+        than O(N2).
         """
         pass
 
     def __iter__(self):
         """
-        TODO: Write this implementation
+        Enables the Bag to iterate across itself. Implement this method in a similar way
+        to the example in the Exploration: Encapsulation and Iterators.
+        You ARE permitted (and will need to) initialize a variable to track the iterator’s progress
+        through the Bag’s contents.
+        You can use either of the two models demonstrated in the Exploration - you can build the
+        iterator functionality inside the Bag, or you can create a separate iterator class
         """
         pass
 
