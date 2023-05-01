@@ -134,52 +134,99 @@ class DynamicArray:
 
     def resize(self, new_capacity: int) -> None:
         """
-        Double capacity of underlying static array when necessary
+        Changes the capacity of the underlying storage for the elements in the dynamic
+        array. It does not change the values or the order of any elements currently stored in the
+        array.
         """
-        new_sa = StaticArray(new_capacity)
+        if new_capacity < 0 or new_capacity < self._size:
+            return
+        new_sa_array = StaticArray(new_capacity)
         for i in range(self._data.length()):
-            new_sa[i] = self._data[i]
-        self._data = new_sa
+            new_sa_array[i] = self._data[i]
+        self._capacity = new_capacity
+        self._data = new_sa_array
 
     def append(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new value at the end of the dynamic array. If the internal storage
+        associated with the dynamic array is already full, you will need to DOUBLE its capacity
+        before adding a new value using the function: resize
         """
         if self._size == self._capacity:
             self.resize(self._capacity * 2)
             self._data[self._size] = value
-            self._size = self._size + 1
+            self._size += 1
         else:
             self._data[self._size] = value
-            self._size = self._size + 1
+            self._size += 1
 
     def insert_at_index(self, index: int, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new value at the specified index in the dynamic array. Index 0 refers to
+        the beginning of the array. If the provided index is invalid, the method raises a custom
+        “DynamicArrayException”
         """
-        pass
+        if index < 0 or index > self._data.length():
+            raise DynamicArrayException
+
+        if self._size == self._capacity:
+            self.resize(self._capacity * 2)
+
+        for i in range(index, self._data.length() - 1):
+            self._data.set(i+1, self._data[i])
+        self._data.set(index, value)
+        self._size += 1
+
 
     def remove_at_index(self, index: int) -> None:
         """
-        TODO: Write this implementation
+        Removes the element at the specified index in the dynamic array. Index 0
+        refers to the beginning of the array. If the provided index is invalid, the method raises a
+        custom “DynamicArrayException”
         """
-        pass
+        if index < 0 or index > self._data.length():
+            raise DynamicArrayException
+
+        if self._size < self._capacity // 4:
+            new_sa_array = StaticArray(self._size * 2)
+            for i in range(self._data.length()):
+                if not self._data[i] is None:
+                    new_sa_array[i] = self._data[i]
+            self._data = new_sa_array
+            self._capacity = self._size * 2
+
+        for i in range(index + 1, self._data.length()):
+            self._data.set(i - 1, self._data[i])
+        self._size -= 1
 
     def slice(self, start_index: int, size: int) -> "DynamicArray":
         """
-        TODO: Write this implementation
+        Returns a new DynamicArray object that contains the requested number of
+        elements from the original array, starting with the element located at the requested start
+        index. If the array contains N elements, a valid start_index is in range [0, N - 1] inclusive.
+        A valid size is a non-negative integer.
         """
-        pass
+        if size < 0:
+            raise DynamicArrayException
+
+        new_da = DynamicArray()
+        for i in range(start_index, start_index + size):
+            new_da.append(self._data[i])
+        return new_da
 
     def merge(self, second_da: "DynamicArray") -> None:
         """
-        TODO: Write this implementation
+        Takes another DynamicArray object as a parameter, and appends all elements
+        from this array onto the current one, in the same order in which they are stored in the input
+        array.
         """
-        pass
+        for i in range(second_da.length()):
+            self.append(second_da[i])
 
     def map(self, map_func) -> "DynamicArray":
         """
-        TODO: Write this implementation
+        Creates a new dynamic array where the value of each element is derived by
+        applying a given map_func to the corresponding value from the original array.
         """
         pass
 
