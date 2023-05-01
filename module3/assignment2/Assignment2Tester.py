@@ -1,5 +1,5 @@
 import unittest
-from static_array import StaticArray
+from static_array import StaticArray, StaticArrayException
 from dynamic_array import DynamicArray, find_mode
 from bag_da import *
 
@@ -8,10 +8,15 @@ class Assignment2Tester(unittest.TestCase):
 
     def test_resize(self):
         da = DynamicArray()
-        print(da)
-        da.resize(da.get_capacity() * 2)
-        print(da.get_capacity())
-        print(da)
+
+        # print dynamic array's size, capacity and the contents
+        # of the underlying static array (data)
+        da.print_da_variables()
+        da.resize(8)
+        da.print_da_variables()
+        da.resize(2)
+        da.print_da_variables()
+        self.assertRaises(StaticArrayException, da.resize, 0)
 
     def test_append(self):
         da = DynamicArray()
@@ -30,32 +35,14 @@ class Assignment2Tester(unittest.TestCase):
         da.insert_at_index(-1, 4)
 
     def test_remove_at_index(self):
-        da = DynamicArray()
+        da = DynamicArray([1024])
         print(da)
-        da.append(4)
-        print(da._data)
-        for i in range(10):
-            da.append(i)
+        for i in range(17):
+            da.insert_at_index(i, i)
+        print(da.length(), da.get_capacity())
+        for i in range(16, -1, -1):
+            da.remove_at_index(0)
         print(da)
-        da.remove_at_index(1)
-        print(da)
-        da.remove_at_index(1)
-        print(da)
-        da.remove_at_index(1)
-        print(da)
-        da.remove_at_index(1)
-        print(da)
-        da.remove_at_index(1)
-        print(da)
-        da.remove_at_index(1)
-        print(da)
-        da.remove_at_index(1)
-        print(da)
-        da.remove_at_index(1)
-        print(da)
-        da.remove_at_index(1)
-        print(da)
-        print(da._data)
 
     def test_slice(self):
         da = DynamicArray([_ for _ in range(100)])

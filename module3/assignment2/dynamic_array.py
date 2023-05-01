@@ -138,10 +138,10 @@ class DynamicArray:
         array. It does not change the values or the order of any elements currently stored in the
         array.
         """
-        if new_capacity < 0 or new_capacity < self._size:
+        if new_capacity <= 0 or new_capacity < self._size:
             return
         new_sa_array = StaticArray(new_capacity)
-        for i in range(self._data.length()):
+        for i in range(self.length()):
             new_sa_array[i] = self._data[i]
         self._capacity = new_capacity
         self._data = new_sa_array
@@ -189,9 +189,8 @@ class DynamicArray:
 
         if self._size < self._capacity // 4:
             new_sa_array = StaticArray(self._size * 2)
-            for i in range(self._data.length()):
-                if not self._data[i] is None:
-                    new_sa_array[i] = self._data[i]
+            for i in range(self.length()):
+                new_sa_array[i] = self._data[i]
             self._data = new_sa_array
             self._capacity = self._size * 2
 
