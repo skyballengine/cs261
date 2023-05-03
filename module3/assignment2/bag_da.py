@@ -49,7 +49,6 @@ class Bag:
         """
         self._da.append(value)
 
-
     def remove(self, value: object) -> bool:
         """
         Removes any one element from the bag that matches the provided value
@@ -61,7 +60,6 @@ class Bag:
                 self._da.remove_at_index(i)
                 return True
         return False
-
 
     def count(self, value: object) -> int:
         """
@@ -92,20 +90,40 @@ class Bag:
         nor sort either bag. The runtime complexity of this implementation should be no greater
         than O(N2).
         """
+        # if both bags empty, then equal
         if self._da.is_empty() and second_bag._da.is_empty():
             return True
 
-        if self._da.length() != second_bag._da.length():
+        # if bags of different length, then NOT equal
+        if self.size() != second_bag.size():
             return False
 
-        for i in range(self._da.length()):
-            flag = False
-            for j in range(second_bag._da.length()):
-                if self._da[i] == second_bag._da.get_at_index(j):
-                    flag = True
-            if not flag:
+        # set flag to false initially
+        flag = False
+        for i in range(self.size()):
+            in_arr = False
+            for j in range(second_bag.size()):
+                if self._da[i] == second_bag._da[j]:
+                    if self.count(self._da[i]) == second_bag.count(second_bag._da[j]):
+                        flag = True
+                        in_arr = True
+                        continue
+                    else:
+                        return False
+            if not in_arr:
                 return False
-        return True
+        return flag
+        # nested loops to check if elements are in
+        # for i in range(self._da.length()):
+        #     flag = False
+        #     count = 0
+        #     for j in range(second_bag._da.length()):
+        #         if self._da[i] == second_bag._da.get_at_index(j):
+        #             count += 1
+        #             flag = True
+        #     if not flag:
+        #         return False
+        # return True
 
     def __iter__(self):
         """

@@ -166,37 +166,75 @@ class DynamicArray:
         the beginning of the array. If the provided index is invalid, the method raises a custom
         “DynamicArrayException”
         """
-        if index < 0 or index > self._data.length():
+        if index < 0 or index > self._size:
             raise DynamicArrayException
 
         if self._size == self._capacity:
             self.resize(self._capacity * 2)
 
-        for i in range(index, self._data.length() - 1):
-            self._data.set(i+1, self._data[i])
+        if self._size == 0:
+            self._data[0] = value
+            self._size += 1
+            return
+
+        for i in range(self.length(), index, -1):
+            self._data[i] = self._data[i - 1]
+
         self._data.set(index, value)
         self._size += 1
-
 
     def remove_at_index(self, index: int) -> None:
         """
         Removes the element at the specified index in the dynamic array. Index 0
         refers to the beginning of the array. If the provided index is invalid, the method raises a
         custom “DynamicArrayException”
+
+        When the number of elements stored in the array (before removal) is STRICTLY LESS than
+        1/4 of its current capacity, the capacity must be reduced to TWICE the number of current
+        elements. This check and capacity adjustment must occur BEFORE removal of the element.
+
+        If the current capacity (before reduction) is 10 elements or less, reduction should not occur
+        at all. If the current capacity (before reduction) is greater than 10 elements, the reduced
+        capacity cannot become less than 10 elements. Please see the examples below, especially
+        example #3, for clarification.
         """
-        if index < 0 or index > self._data.length():
+        # validate index parameter
+        if index < 0 or index >= self.length():
             raise DynamicArrayException
 
-        if self._size < self._capacity // 4:
-            new_sa_array = StaticArray(self._size * 2)
-            for i in range(self.length()):
+        # if _size equals 1, can remove single element in constant time (as noted in instructions)
+        if self._size == 1:
+            self._data[0] = None
+            self._size -= 1
+
+        elif self._size < self._capacity / 4 and self._capacity < 10:
+            for i in range(index + 1, self._data.length()):
+                self._data.set(i - 1, self._data[i])
+            self._size -= 1
+
+        # number of elements is less than 1/4 the capacity
+        elif self._size < self._capacity / 4 and self._capacity > 10:
+
+            # capacity is > 10 we WILL resize the array
+            if self._size * 2 < 10:
+                new_capacity = 10
+            else:
+                new_capacity = self._size * 2
+
+            new_sa_array = StaticArray(new_capacity)
+            for i in range(new_sa_array.length()):
                 new_sa_array[i] = self._data[i]
             self._data = new_sa_array
-            self._capacity = self._size * 2
+            self._capacity = self._data.length()
+            # element removal loop and decrement _size attribute
+            for i in range(index + 1, self._data.length()):
+                self._data.set(i - 1, self._data[i])
+            self._size -= 1
 
-        for i in range(index + 1, self._data.length()):
-            self._data.set(i - 1, self._data[i])
-        self._size -= 1
+        else:
+            for i in range(index + 1, self._data.length()):
+                self._data.set(i - 1, self._data[i])
+            self._size -= 1
 
     def slice(self, start_index: int, size: int) -> "DynamicArray":
         """
@@ -205,7 +243,8 @@ class DynamicArray:
         index. If the array contains N elements, a valid start_index is in range [0, N - 1] inclusive.
         A valid size is a non-negative integer.
         """
-        if size < 0:
+        # validate method parameters
+        if size < 0 or start_index < 0 or start_index > self._size - 1 or size > self._size or (size + start_index) > self._size:
             raise DynamicArrayException
 
         new_da = DynamicArray()
@@ -240,10 +279,10 @@ class DynamicArray:
         original array for which filter_func returns True.
         """
         new_da_array = DynamicArray()
-        for i in range(self._data.length()):
-            if not self._data[i] is None:
-                result = filter_func(self._data[i])
-                new_da_array.append(result)
+        for i in range(self.length()):
+            result = filter_func(self._data[i])
+            if result:
+                new_da_array.append(self._data[i])
         return new_da_array
 
     def reduce(self, reduce_func, initializer=None) -> object:
@@ -261,7 +300,7 @@ class DynamicArray:
         if self.is_empty():
             return initializer
         initializer = reduce_func(initializer, self._data[0])
-        for i in range(self.length()-1):
+        for i in range(self.length() - 1):
             initializer = reduce_func(initializer, self._data[i + 1])
         return initializer
 
@@ -277,6 +316,7 @@ def find_mode(arr: DynamicArray) -> (DynamicArray, int):
     should be included in the array being returned in the order in which they appear in the input
     array. If there is only one mode, only that value should be included.
     """
+
     # mode dynamic array
     mode_da = DynamicArray()
 
@@ -287,14 +327,20 @@ def find_mode(arr: DynamicArray) -> (DynamicArray, int):
     count = 1
     # assign tuple: mode to first element with a count of 1
     mode = (element, count)
-
+    mode_count = 0
     # if arr length is 1, then that is the mode
     if arr.length() == 1:
-        return mode
-        # assign variable: arr_len to arr.length() and use nested loop (I know I'm not supposed to, lol)
+        mode_da.append(arr[0])
+        return mode_da, count
+
+    # assign variable: arr_len to arr.length() and use nested loop (I know I'm not supposed to, lol)
+    arr_len = arr.length()
+    # sample list [1, 1, 3, 3, 4, 4, 4, 5]
+    mode_da.append(mode[0])
     arr_len = arr.length()
     for i in range(arr_len):
         # for each iteration count begins with 1
+        current = arr[i]
         count = 1
         # for each element starting with variable: i, check if next element is equal, else break
         # count tracks number of occurrences
@@ -303,15 +349,57 @@ def find_mode(arr: DynamicArray) -> (DynamicArray, int):
                 count += 1
             else:
                 break
-
         # if current mode count is less than current count, then assign var: element to arr[i]
         # and redefine var: mode with new count value
-        if mode[1] < count:
+        if count > mode[1]:
+            for k in range(mode_da.length()):
+                mode_da.remove_at_index(0)
+            if mode_da.is_empty():
+                mode_da.resize(4)
             element = arr[i]
             mode = (element, count)
-    mode_da.append(mode[0])
+            mode_da.append(arr[i])
+
+        elif count == mode[1]:
+            if mode_da.get_at_index(mode_da.length()-1) != arr[i]:
+                mode_da.append(arr[i])
+
+        # else:
+        #     continue
+
     return mode_da, mode[1]
 
+    # for i in range(arr_len):
+    #     count = 1
+    #     if arr[i] == arr[i+1]:
+    #         count += 1
+    #     if count > mode[1]:
+    #         mode = (arr[i], count)
+    #         mode_da.append(arr[i])
+    # return mode_da, mode[1]
+
+
+
+
+
+    # for i in range(arr_len):
+    #     # for each iteration count begins with 1
+    #     count = 1
+    #     # for each element starting with variable: i, check if next element is equal, else break
+    #     # count tracks number of occurrences
+    #     for j in range(i, arr_len - 1):
+    #         if arr[i] == arr[j + 1]:
+    #             count += 1
+    #         else:
+    #             break
+    #
+    #     # if current mode count is less than current count, then assign var: element to arr[i]
+    #     # and redefine var: mode with new count value
+    #     if mode[1] < count:
+    #         element = arr[i]
+    #         mode = (element, count)
+    # mode_da.append(mode[0])
+    # return mode_da, mode[1]
 
 
 # ------------------- BASIC TESTING -----------------------------------------
