@@ -1,10 +1,9 @@
-# Name:
-# OSU Email:
+# Name:Eusebius Ballentine
+# OSU Email:ballente@oregonstate.edu
 # Course: CS261 - Data Structures
-# Assignment:
-# Due Date:
-# Description:
-
+# Assignment:Assignment 3
+# Due Date:05-08-2023
+# Description: Part 5
 
 from SLNode import SLNode
 
@@ -64,9 +63,22 @@ class Queue:
 
     def enqueue(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new value to the end of the queue. It must be implemented with
+        O(1) runtime complexity.
         """
-        pass
+        if self.is_empty():
+            self._head = SLNode(value)
+
+        elif self._tail is None:
+            self._tail = SLNode(value)
+            self._head.next = self._tail
+
+        else:
+            curr = self._tail
+            new_tail = SLNode(value)
+            curr.next = new_tail
+            self._tail = new_tail
+
 
     def dequeue(self) -> object:
         """

@@ -1,9 +1,9 @@
-# Name:
-# OSU Email:
+# Name:Eusebius Ballentine
+# OSU Email:ballente@oregonstate.edu
 # Course: CS261 - Data Structures
-# Assignment:
-# Due Date:
-# Description:
+# Assignment:Assignment 3
+# Due Date:05-08-2023
+# Description: Part 3
 
 
 # Note: Changing any part of the pre-implemented methods (besides adding  #

@@ -1,9 +1,9 @@
-# Name:
-# OSU Email:
+# Name:Eusebius Ballentine
+# OSU Email:ballente@oregonstate.edu
 # Course: CS261 - Data Structures
-# Assignment:
-# Due Date:
-# Description:
+# Assignment:Assignment 3
+# Due Date:05-08-2023
+# Description: Part 4
 
 
 from SLNode import SLNode
@@ -63,21 +63,41 @@ class Stack:
 
     def push(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new element to the top of the stack.
         """
-        pass
+        if self.is_empty():
+            self._head = SLNode(value)
+
+        else:
+            curr = self._head
+            self._head = SLNode(value)
+            self._head.next = curr
+
 
     def pop(self) -> object:
         """
-        TODO: Write this implementation
+        Removes the top element from the stack and returns its value. It must be
+        implemented with O(1) runtime complexity. If the stack is empty, the method raises a
+        custom “StackException”
         """
-        pass
+        if self.is_empty():
+            raise StackException
+
+        curr = self._head
+        self._head = self._head.next
+        return curr.value
+
 
     def top(self) -> object:
         """
-        TODO: Write this implementation
+        Returns the value of the top element of the stack without removing it. It must
+        be implemented with O(1) runtime complexity. If the stack is empty, the method
+        raises a custom “StackException”
         """
-        pass
+        if self.is_empty():
+            raise StackException
+
+        return self._head.value
 
 # ------------------- BASIC TESTING -----------------------------------------
 
