@@ -1,8 +1,9 @@
 import unittest
-
-from module4.queue_sll import Queue
-from sll import *
-from stack_sll import Stack
+# from module4.queue_sll import Queue
+from sll import LinkedList
+# from stack_sll import Stack
+from stack_da import Stack
+from queue_sa import Queue
 
 class Assignment3Tester(unittest.TestCase):
 
@@ -91,13 +92,38 @@ class Assignment3Tester(unittest.TestCase):
     # Stack Dynamic Array
 
     def test_da_push(self):
-        pass
+        s = Stack()
+        print(s)
+        for value in [1, 2, 3, 4, 5]:
+            s.push(value)
+        print(s)
 
-    def da_pop(self):
-        pass
+    def test_da_pop(self):
+        s = Stack()
+        try:
+            print(s.pop())
+        except Exception as e:
+            print("Exception:", type(e))
+        for value in [1, 2, 3, 4, 5]:
+            s.push(value)
+        for i in range(6):
+            try:
+                print(s.pop())
+            except Exception as e:
+                print("Exception:", type(e))
 
     def test_da_top(self):
-        pass
+        s = Stack()
+        try:
+            s.top()
+        except Exception as e:
+            print("No elements in stack", type(e))
+        s.push(10)
+        s.push(20)
+        print(s)
+        print(s.top())
+        print(s.top())
+        print(s)
 
     # Stack List Nodes
 
@@ -137,14 +163,89 @@ class Assignment3Tester(unittest.TestCase):
 
     # Queue Dynamic Array
 
-    def test_da_enqueue(self):
-        pass
+    def test_sa_enqueue(self):
+        q = Queue()
+        print(q)
+        for value in [1, 2, 3, 4, 5]:
+            q.enqueue(value)
+        print(q)
 
-    def test_da_dequeue(self):
-        pass
+    def test_sa_dequeue(self):
+        q = Queue()
+        for value in [1, 2, 3, 4, 5]:
+            q.enqueue(value)
+        print(q)
+        for i in range(q.size() + 1):
+            try:
+                print(q.dequeue())
+            except Exception as e:
+                print("No elements in queue", type(e))
+        for value in [6, 7, 8, 111, 222, 3333, 4444]:
+            q.enqueue(value)
+        print(q)
+        q.print_underlying_sa()
+        for i in range(q.size() + 1):
+            try:
+                print(q.dequeue())
+            except Exception as e:
+                print("No elements in queue", type(e))
 
-    def test_da_front(self):
-        pass
+    def test_sa_front(self):
+        # q = Queue()
+        # print(q)
+        # for value in ['A', 'B', 'C', 'D']:
+        #     try:
+        #         print(q.front())
+        #     except Exception as e:
+        #         print("No elements in queue", type(e))
+        #     q.enqueue(value)
+        #     print(q)
+        # print(q)
+
+        print('Step 1\n')
+        print("\nCircular buffer tests")
+        q = Queue()
+        print(" Enqueue: 2, 4, 6, 8 ")
+        test_case = [2, 4, 6, 8]
+        for value in test_case:
+            q.enqueue(value)
+        print(q)
+        q.print_underlying_sa()
+        print()
+
+        print('Step 2\n')
+        q.dequeue()
+        print(q)
+        q.print_underlying_sa()
+        print()
+
+        print('Step 3\n')
+        q.enqueue(10)
+        print(q)
+        q.print_underlying_sa()
+        print()
+
+        print('Step 4\n')
+        q.enqueue(12)
+        print(q)
+        q.print_underlying_sa()
+        print()
+
+        print('Step 5\n')
+        print('Dequeue until empty')
+        while not q.is_empty():
+            q.dequeue()
+        print(q)
+        q.print_underlying_sa()
+        print()
+
+    def test_double_queue(self):
+        q = Queue()
+        print(q)
+        print(q.print_underlying_sa())
+        q._double_queue()
+        print(q)
+        print(q.print_underlying_sa())
 
     # Queue List Nodes
     def test_ln_enqueue(self):
@@ -155,7 +256,23 @@ class Assignment3Tester(unittest.TestCase):
         print(q)
 
     def test_ln_dequeue(self):
-        pass
+        q = Queue()
+        for value in [1, 2, 3, 4, 5]:
+            q.enqueue(value)
+        print(q)
+        for i in range(6):
+            try:
+                print(q.dequeue())
+            except Exception as e:
+                print("No elements in queue", type(e))
 
     def test_ln_front(self):
-        pass
+        q = Queue()
+        print(q)
+        for value in ['A', 'B', 'C', 'D']:
+            try:
+                print(q.front())
+            except Exception as e:
+                print("No elements in queue", type(e))
+            q.enqueue(value)
+        print(q)

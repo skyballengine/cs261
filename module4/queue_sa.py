@@ -68,30 +68,109 @@ class Queue:
 
     def enqueue(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new value to the end of the queue. It must be implemented with
+        O(1) amortized runtime complexity.
         """
-        pass
+        # if self._front is not None:
+        #     self._sa.set(self.size(), value)
+        # else:
+        #     end_index = self._front + (self.size() - 1)
+        #     self._sa.set(end_index, value)
+
+        if self.size() == 0:
+            self._sa.set(self._front, value)
+            self._current_size += 1
+            self._back += 1
+
+        elif self._front == 0:
+            if self._current_size == self._sa.length():
+                self._double_queue()
+            self._sa.set(self._current_size, value)
+            self._current_size += 1
+            self._back += 1
+
+        elif self._front > 0:
+            # if self._current_size == self._sa.length():
+            #     self._double_queue()
+
+            # if there's room at the end of the array
+            if self._front + self._current_size < self._sa.length():
+                self._sa.set(self._front + self._current_size, value)
+                self._current_size += 1
+                self._back += 1
+
+            # if there's no room at the end but there's room at the front
+            elif self._back == (self._sa.length() - 1) and self._current_size < self._sa.length():
+                self._back = self._increment(self._back)
+                self._sa.set(self._back, value)
+                self._current_size += 1
+                # self._back += 1
+
+            # if there's no more room, resize and add to end of new queue's array
+            elif (self._back == self._sa.length() - 1 or self._back == self._front - 1) and self._current_size == self._sa.length():
+                self._double_queue()
+                self._sa.set(self._current_size, value)
+                self._current_size += 1
+                # self._back += 1
+
+            # if there's room before the _front of the queue in the array
+            elif self._back < self._front:
+                self._back += 1
+                self._sa.set(self._back, value)
+                self._current_size += 1
+
+            # else:
+
+
 
     def dequeue(self) -> object:
         """
-        TODO: Write this implementation
+        Removes and returns the value at the beginning of the queue. It must be
+        implemented with O(1) runtime complexity. If the queue is empty, the method raises a
+        custom “QueueException”.
         """
-        pass
+        if self.size() == 0:
+            raise QueueException
+        if self._front == self._sa.length()-1:
+            val = self._sa[self._front]
+            self._front = self._increment(self._front)
+            self._current_size -= 1
+
+        else:
+            val = self._sa[self._front]
+            self._current_size -= 1
+            self._front += 1
+        return val
 
     def front(self) -> object:
         """
-        TODO: Write this implementation
+        Returns the value of the front element of the queue without removing it. It
+        must be implemented with O(1) runtime complexity. If the queue is empty, the
+        method raises a custom “QueueException”.
         """
-        pass
+        if self.size() == 0:
+            raise QueueException
 
+        val = self._sa[self._front]
+        return val
     # The method below is optional, but recommended, to implement. #
     # You may alter it in any way you see fit.                     #
 
     def _double_queue(self) -> None:
         """
-        TODO: Write this implementation
+        Helper method for resizing underlying StaticArray
         """
-        pass
+        new_length = self._sa.length() * 2
+        new_sa = StaticArray(new_length)
+        index = self._front
+        for i in range(self._sa.length()):
+            if index == self._sa.length():
+                index = 0
+            new_sa.set(i, self._sa.get(index))
+            index += 1
+        self._sa = new_sa
+        self._front = 0
+        self._back = self._current_size - 1
 
 
 # ------------------- BASIC TESTING -----------------------------------------
@@ -134,6 +213,7 @@ if __name__ == "__main__":
 
     print("\n# Circular buffer tests: #\n")
 
+
     def action_and_print(
             header: str, action: callable, values: [], queue: Queue) -> None:
         """
@@ -149,6 +229,7 @@ if __name__ == "__main__":
         print(queue)
         queue.print_underlying_sa()
         print()
+
 
     q = Queue()
 

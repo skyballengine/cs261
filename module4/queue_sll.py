@@ -82,15 +82,27 @@ class Queue:
 
     def dequeue(self) -> object:
         """
-        TODO: Write this implementation
+        Removes and returns the value from the beginning of the queue. It must be
+        implemented with O(1) runtime complexity. If the queue is empty, the method raises a
+        custom “QueueException”
         """
-        pass
+        if self.is_empty():
+            raise QueueException
+
+        curr_val = self._head.value
+        self._head = self._head.next
+        return curr_val
 
     def front(self) -> object:
         """
-        TODO: Write this implementation
+        Returns the value of the front element of the queue without removing it. It
+        must be implemented with O(1) runtime complexity. If the queue is empty, the
+        method raises a custom “QueueException”
         """
-        pass
+        if self.is_empty():
+            raise QueueException
+
+        return self._head.value
 
 
 # ------------------- BASIC TESTING -----------------------------------------

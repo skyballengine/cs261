@@ -6,7 +6,10 @@
 # Description: Part 2
 
 
-from dynamic_array import *
+# import sys
+# sys.path.append('../module3')
+# from module3.assignment2.dynamic_array import DynamicArray
+from dynamic_array import DynamicArray
 
 
 class StackException(Exception):
@@ -52,21 +55,37 @@ class Stack:
 
     def push(self, value: object) -> None:
         """
-        TODO: Write this implementation
+        Adds a new element to the top of the stack. It must be implemented with
+        O(1) amortized runtime complexity.
         """
-        pass
+        self._da.append(value)
 
     def pop(self) -> object:
         """
-        TODO: Write this implementation
+        Removes the top element from the stack and returns its value. It must be
+        implemented with O(1) amortized runtime complexity. If the stack is empty, the
+        method raises a custom “StackException”
         """
-        pass
+        if self._da.is_empty():
+            raise StackException
+
+        end_index = self.size() - 1
+        value = self._da[end_index]
+        self._da.remove_at_index(end_index)
+        return value
 
     def top(self) -> object:
         """
-        TODO: Write this implementation
+        Returns the value of the top element of the stack without removing it. It must
+        be implemented with O(1) runtime complexity. If the stack is empty, the method
+        raises a custom “StackException”.
         """
-        pass
+        if self._da.is_empty():
+            raise StackException
+
+        end_index = self.size() - 1
+        value = self._da[end_index]
+        return value
 
 
 # ------------------- BASIC TESTING -----------------------------------------
