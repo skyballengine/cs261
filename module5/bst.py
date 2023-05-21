@@ -287,20 +287,37 @@ class BST:
         """
         Remove node that has no subtrees (no left or right nodes)
         """
-        pass
+        if remove_parent.left == remove_node:
+            remove_parent.left = None
+        elif remove_parent.right == remove_node:
+            remove_parent.right = None
+        else:
+            print(f'{remove_parent} is not the parent node of {remove_node}')
 
     def _remove_one_subtree(self, remove_parent: BSTNode, remove_node: BSTNode) -> None:
         """
         Remove node that has a left or right subtree (only)
         """
-        pass
+        if remove_parent.left == remove_node:
+            if remove_node.left:
+                remove_parent.left = remove_node.left
+            else:
+                remove_parent.left = remove_node.right
+        elif remove_parent.right == remove_node:
+            if remove_node.left:
+                remove_parent.right = remove_node.left
+            else:
+                remove_parent.right = remove_node.right
+        else:
+            print(f'{remove_parent} is not the parent node of {remove_node}')
+
 
     def _remove_two_subtrees(self, remove_parent: BSTNode, remove_node: BSTNode) -> None:
         """
         Remove node that has two subtrees
         Need to find inorder successor and its parent (make a method!)
         """
-        pass
+
 
     def contains(self, value: object) -> bool:
         """
@@ -334,20 +351,20 @@ class BST:
         the method returns an empty Queue. It must be implemented with O(N) runtime
         complexity.
         """
+
         inorder_queue = Queue()
-        if self._root is None:
-            return inorder_queue
+        node = self._root
+        self.recursive_inorder_traversal(node, inorder_queue)
+        return inorder_queue
 
-        prev = None
-        curr = self._root
-        while curr:
+    def recursive_inorder_traversal(self, node=None, queue=None) -> None:
+        if node is None:
+            return
 
-
-
-
-
-
-        pass
+        self.recursive_inorder_traversal(node.left, queue)
+        queue.enqueue(node.value)
+        self.recursive_inorder_traversal(node.right, queue)
+        return
 
     def find_min(self) -> object:
         """
@@ -388,9 +405,12 @@ class BST:
 
     def make_empty(self) -> None:
         """
-        TODO: Write your implementation
+        Removes all of the nodes from the tree. It must be implemented with O(1)
+        runtime complexity.
         """
-        pass
+        self._root = None
+
+
 
 
 # ------------------- BASIC TESTING -----------------------------------------

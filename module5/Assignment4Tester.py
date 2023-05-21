@@ -131,7 +131,8 @@ class Assignment4Tester(unittest.TestCase):
         pass
 
     def test_inorder_traversal(self):
-        pass
+        tree = BST([10, 20, 5, 15, 17, 7, 12])
+        print(tree.inorder_traversal())
 
     def test_find_min(self):
         tree = BST([10, 20, 5, 15, 17, 7, 12])
@@ -150,7 +151,13 @@ class Assignment4Tester(unittest.TestCase):
         print(tree.is_empty())
 
     def test_make_empty(self):
-        pass
+        tree = BST([10, 20, 5, 15, 17, 7, 12])
+        tree.make_empty()
+        print(tree)
+
+        tree = BST()
+        tree.make_empty()
+        print(tree)
 
     # testing for AVL objects
 
