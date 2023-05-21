@@ -75,6 +75,49 @@ class Assignment4Tester(unittest.TestCase):
             tree.remove(del_value)
             print('RESULT :', tree)
 
+        tree = BST([-57, -86, 76, 77, 14, 46, -14, 28, -66, -97])
+        print('INPUT  :', tree)
+        tree.remove(-57)
+        print('RESULT :', tree)
+
+        tree = BST([-28, 38, 71, -17, 16, 82, -12, 22, 24, -100])
+        print('INPUT  :', tree)
+        tree.remove(-28)
+        print('RESULT :', tree)
+
+        tree = BST([-94, -84, -20, -51, -83, -16, -76, -42, -67, -34])
+        print('INPUT  :', tree)
+        tree.remove(-94)
+        print('RESULT :', tree)
+        tree.remove(-20)
+        print('RESULT :', tree)
+
+        tree = BST([96, -96, -32, 34, 100, 37, -89, -81, -12, -100])
+        print('INPUT  :', tree)
+        print(tree.remove(96))
+        print('RESULT :', tree)
+
+        tree = BST([66, 70, 41, 11, 12, -74, 23, 62, 61, 30])
+        print('INPUT  :', tree)
+        print(tree.remove(66))
+        print('RESULT :', tree)
+        print(tree.remove(41))
+        print('RESULT :', tree)
+
+        tree = BST([99, -23, -18, 48, 83, -12, 52, -13, 26, -100])
+        print('INPUT  :', tree)
+        print(tree.remove(99))
+        print('RESULT :', tree)
+
+        tree = BST([-31, 37, 7, 50, -10, 23, -39, -38, 92, 25])
+        print('INPUT  :', tree)
+        tree.remove(-31)
+        print('RESULT :', tree)
+        tree.remove(7)
+        print('RESULT :', tree)
+        tree.remove(-10)
+        print('RESULT :', tree)
+
     def test_remove_no_subtrees(self):
         pass
 

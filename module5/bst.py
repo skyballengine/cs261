@@ -164,10 +164,26 @@ class BST:
         curr = self._root
         while curr:
             # go left
-            if value < curr.value or need_successor:
-                prev = curr
-                curr = prev.left
-                flag = 'left'
+            if value < curr.value or need_successor:  # include condition in case we need to continue left
+                # if we have established we need the inorder successor
+                if need_successor:
+                    if curr.left is None:
+                        # now we know the parent and the inorder successor
+                        parent_successor = prev
+                        # prev will be the inorder successor
+                        prev = curr
+                        break
+
+                    else:  # there is a left child of the right child
+                        # keep going left, tracking 3 nodes
+                        parent_successor = prev
+                        prev = curr  # prev will be the inorder successor
+                        curr = curr.left
+
+                else:
+                    prev = curr
+                    curr = prev.left
+                    flag = 'left'
             # go right
             elif value > curr.value:
                 prev = curr
@@ -182,7 +198,7 @@ class BST:
                 elif flag == 'right':
                     prev.right = curr.left
                 else:  # flag equals 'root'
-                    self._root = curr.right
+                    self._root = curr.left
                 return True
             # if node has one right child, replace it with its child's subtree
             elif curr.value == value and (curr.right and curr.left is None):
@@ -205,31 +221,60 @@ class BST:
 
             # if node has two children, replace it with its inorder successor AND WE MUST CONTINUE DOWN THE TREE
             elif curr.value == value and (curr.left and curr.right):
+
                 if curr.right.left is None:
-                    if flag == 'left':
+                    replacement_node = curr.right
+                    if curr == self._root:
+                        replacement_node = curr.right
+                        replacement_node.left = curr.left
+                        curr.right = None
+                        curr.left = None
+                        self._root = replacement_node
+                        return True
+
+                    elif flag == 'left':
                         replacement_node = curr.right
                         prev.left = replacement_node
                         replacement_node.left = curr.left
                         return True
-                    else:
-                        prev.right = curr.right
+
+                    elif flag == 'right':
+                        replacement_node = curr.right
+                        prev.right = replacement_node
+                        replacement_node.left = curr.left
                         return True
+
+                # if there is a curr.right.left, look for inorder successor
                 need_successor = True
                 parent_remove = prev
                 node_remove = curr
                 flag_remove = flag
+                prev = curr.right
+                curr = curr.right.left
+                parent_successor = None
 
-        # replace node with inorder successor
         if need_successor:
-            if flag_remove == 'left':
-                parent_remove.left = prev
-                prev.left = node_remove.left
-                return True
+            inorder_successor = prev
+            if inorder_successor.right:
+                parent_successor.left = inorder_successor.right
             else:
-                parent_remove.right = prev
-                prev.left = node_remove.left
-                return True
+                parent_successor.left = None
+            inorder_successor.right = node_remove.right
+            inorder_successor.left = node_remove.left
+            node_remove.left = None
+            node_remove.right = None
 
+
+            # check which side we moved and assign the parent node of the removed node to the inorder succcessor
+            if flag_remove == 'right':
+                parent_remove.right = inorder_successor
+
+            elif flag_remove == 'left':
+                parent_remove.left = inorder_successor
+
+            if node_remove == self._root:
+                self._root = inorder_successor
+            return True
         return False
 
     # Consider implementing methods that handle different removal scenarios; #
@@ -284,8 +329,24 @@ class BST:
 
     def inorder_traversal(self) -> Queue:
         """
-        TODO: Write your implementation
+        Perform an inorder traversal of the tree and return a Queue object that
+        contains the values of the visited nodes, in the order they were visited. If the tree is empty,
+        the method returns an empty Queue. It must be implemented with O(N) runtime
+        complexity.
         """
+        inorder_queue = Queue()
+        if self._root is None:
+            return inorder_queue
+
+        prev = None
+        curr = self._root
+        while curr:
+
+
+
+
+
+
         pass
 
     def find_min(self) -> object:
