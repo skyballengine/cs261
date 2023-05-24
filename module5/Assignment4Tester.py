@@ -162,10 +162,71 @@ class Assignment4Tester(unittest.TestCase):
     # testing for AVL objects
 
     def test_add_avl(self):
-        pass
+        print("\nPDF - method add() example 1")
+        print("----------------------------")
+        #
+        # tree = AVL()
+        # tree.add(1)
+        # tree.add(2)
+        # tree.add(3)
+        # print(tree)
+        # print(tree.is_valid_avl())
+        test_cases = (
+            (1, 2, 3),  # RR
+            (3, 2, 1),  # LL
+            (1, 3, 2),  # RL
+            (3, 1, 2),  # LR
+        )
+        for case in test_cases:
+            tree = AVL(case)
+            print(tree)
+            print(tree.is_valid_avl())
+
+        test_cases = (
+            (10, 20, 30, 40, 50),  # RR, RR
+            (10, 20, 30, 50, 40),  # RR, RL
+            (30, 20, 10, 5, 1),  # LL, LL
+            (30, 20, 10, 1, 5),  # LL, LR
+            (5, 4, 6, 3, 7, 2, 8),  # LL, RR
+            (range(0, 30, 3)),
+            (range(0, 31, 3)),
+            (range(0, 34, 3)),
+            (range(10, -10, -2)),
+            ('A', 'B', 'C', 'D', 'E'),
+            (1, 1, 1, 1),
+        )
+        for case in test_cases:
+            tree = AVL(case)
+            print('INPUT  :', case)
+            print('RESULT :', tree)
 
     def test_remove_avl(self):
-        pass
+
+        tree = AVL([0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33])
+        print(tree)
+        print(tree.is_valid_avl())
+        tree.remove(21)
+        print(tree)
+        print(tree.is_valid_avl())
+        tree.remove(24)
+        print(tree)
+        print(tree.is_valid_avl())
+        tree.remove(27)
+        print(tree)
+        print(tree.is_valid_avl())
+        tree.remove(9)
+        print(tree)
+        print(tree.is_valid_avl())
+
+        print(f'\nTest 5')
+        for _ in range(100):
+            case = list(set(random.randrange(1, 20000) for _ in range(900)))
+            tree = AVL(case)
+            for value in case[::2]:
+                tree.remove(value)
+            if not tree.is_valid_avl():
+                raise Exception("PROBLEM WITH REMOVE OPERATION")
+        print('Stress test finished')
 
     def test_remove_two_subtrees_avl(self):
         pass
@@ -174,7 +235,37 @@ class Assignment4Tester(unittest.TestCase):
         pass
 
     def test_get_height_avl(self):
-        pass
+        tree = AVL([10, 20, 5, 15, 17, 7, 12, 6])
+        print(tree)
+        print(tree.is_valid_avl())
+        tree.add(25)
+        print(tree)
+        tree.add(50)
+        print(tree)
+        tree.add(40)
+        print(tree)
+        tree.add(45)
+        print(tree)
+        tree.add(42)
+        print(tree)
+        tree.add(19)
+        print(tree)
+        tree.add(18)
+        print(tree)
+        node = tree.contains(12)
+        print(node.height)
+        print(tree.contains(1000))
+        # print('First run')
+        # for num in [50, 40, 45, 42, 6, 19, 18]:
+        #     node = tree.contains(num)
+        #     print(f'Node {num} height: {node.height}')
+        #
+        # print('\nSecond run')
+        # for num in [10, 7, 25, 12, 20, 15]:
+        #     node = tree.contains(num)
+        #     node_height = tree._get_height(node)
+        #     print(f'Node {num} height: {node_height}')
+
 
     def test_rotate_left_avl(self):
         pass

@@ -191,7 +191,7 @@ class BST:
                 flag = 'right'
 
             # if curr.value equals value, we have found the node
-            # if node has one left child, replace it with its child's subtree
+            # if node only has one left child, replace node with its left child
             elif curr.value == value and (curr.left and curr.right is None):
                 if flag == 'left':
                     prev.left = curr.left
@@ -264,7 +264,6 @@ class BST:
             node_remove.left = None
             node_remove.right = None
 
-
             # check which side we moved and assign the parent node of the removed node to the inorder succcessor
             if flag_remove == 'right':
                 parent_remove.right = inorder_successor
@@ -298,6 +297,23 @@ class BST:
         """
         Remove node that has a left or right subtree (only)
         """
+        # prev = None
+        # curr = self._root
+        # parent_node = None
+        # removal_node = None
+        # while curr:
+        #     if removal_node.value < curr.value:
+        #         prev = curr
+        #         curr = curr.left
+        #
+        #     elif removal_node.value > curr.value:
+        #         prev = curr
+        #         curr = curr.right
+        #
+        #     else:
+        #         parent_node = prev
+        #         removal_node = curr
+
         if remove_parent.left == remove_node:
             if remove_node.left:
                 remove_parent.left = remove_node.left
@@ -311,19 +327,67 @@ class BST:
         else:
             print(f'{remove_parent} is not the parent node of {remove_node}')
 
-
     def _remove_two_subtrees(self, remove_parent: BSTNode, remove_node: BSTNode) -> None:
         """
         Remove node that has two subtrees
         Need to find inorder successor and its parent (make a method!)
         """
+        # prev = None
+        # curr = self._root
+        # parent_node = None
+        # removal_node = None
+        # while curr:
+        #     if removal_node.value < curr.value:
+        #         prev = curr
+        #         curr = curr.left
+        #
+        #     elif removal_node.value > curr.value:
+        #         prev = curr
+        #         curr = curr.right
+        #
+        #     else:
+        #         parent_node = prev
+        #         removal_node = curr
 
+        # we have the nodes now
+
+        inorder_successor = None
+        flag = None
+        prev = remove_node
+        curr = remove_node.right
+        if remove_parent.left == remove_node:
+            flag = 'left'
+        elif remove_parent.right == remove_node:
+            flag = 'right'
+        else:
+            print(f'{remove_parent} is not the parent of {remove_node}')
+            return
+
+        while curr.left:
+            prev = curr
+            curr = curr.left
+
+        # curr is now inorder successor
+        if curr.right:
+            prev.left = curr.right
+        else:
+            prev.left = None
+
+        if flag == 'left':
+            remove_parent.left = curr
+        else:
+            remove_parent.right = curr
+
+        curr.left = remove_node.left
+        curr.right = remove_node.right
+        remove_node.left = None
+        remove_node.right = None
 
     def contains(self, value: object) -> bool:
         """
         Returns True if the value is in the tree. Otherwise, it returns False. If the tree is
         empty, the method should return False. It must be implemented with O(N) runtime
-        complexity.
+        complexity
         """
         if self._root is None:
             return False
@@ -358,6 +422,9 @@ class BST:
         return inorder_queue
 
     def recursive_inorder_traversal(self, node=None, queue=None) -> None:
+        """
+        Helper method for inorder_traversal method, accepts parameters whose arguments are defined in inorder_traversal
+        """
         if node is None:
             return
 
@@ -409,8 +476,6 @@ class BST:
         runtime complexity.
         """
         self._root = None
-
-
 
 
 # ------------------- BASIC TESTING -----------------------------------------

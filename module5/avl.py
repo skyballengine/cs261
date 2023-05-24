@@ -16,6 +16,7 @@ class AVLNode(BSTNode):
     AVL Tree Node class. Inherits from BSTNode
     DO NOT CHANGE THIS CLASS IN ANY WAY
     """
+
     def __init__(self, value: object) -> None:
         """
         Initialize a new AVL node
@@ -101,29 +102,296 @@ class AVL(BST):
 
     def add(self, value: object) -> None:
         """
-        TODO: Write your implementation
+        Adds a new value to the tree while maintaining its AVL property. Duplicate
+        values are not allowed. If the value is already in the tree, the method should not change
+        the tree. It must be implemented with O(log N) runtime complexity.
         """
-        pass
+        #     curr = self._root
+        #     self.add_util(curr, value)
+        #     return curr
+        #
+        # def add_util(self, root=None, value=None):
+        #     if not root:
+        #         return AVLNode(value)
+        #
+        #     elif value < root.value:
+        #         root.left = self.add_util(root.left, value)
+        #     else:
+        #         root.right = self.add_util(root.right, value)
+        #
+        #     root.height = self._get_height(root.right) - self._get_height(root.left)
+        new_node = AVLNode(value)
+        prev = None
+        curr = self._root
+        flag = None
+
+        if self._root is None:
+            self._root = new_node
+            return
+
+        while curr:
+            # value is less than curr.value, move to curr.left
+            if value < curr.value:
+                prev = curr
+                curr = prev.left
+                flag = 'left'
+
+            # value is greater than curr.value
+            elif value > curr.value:
+                prev = curr
+                curr = prev.right
+                flag = 'right'
+
+            # value equals current node's value break and do nothing for AVL Trees
+            else:
+                return
+
+        # once we have reached a leaf node
+        if flag == 'left':
+            prev.left = new_node
+            new_node.parent = prev
+
+        else:
+            prev.right = new_node
+            new_node.parent = prev
+
+        curr = new_node
+        parent_node = curr.parent
+        while parent_node is not None:
+            self._rebalance(parent_node)
+            parent_node = parent_node.parent
 
     def remove(self, value: object) -> bool:
         """
-        TODO: Write your implementation
+        Removes the value from the AVL tree. The method returns True if the value is
+        removed. Otherwise, it returns False. It must be implemented with O(log N) runtime
+        complexity.
+        NOTE: See ‘Specific Instructions’ for an explanation of which node replaces the deleted
+        node.
         """
-        pass
+        if self._root is None:
+            return False
 
-    # Experiment and see if you can use the optional                         #
-    # subtree removal methods defined in the BST here in the AVL.            #
-    # Call normally using self -> self._remove_no_subtrees(parent, node)     #
-    # You need to override the _remove_two_subtrees() method in any case.    #
-    # Remove these comments.                                                 #
-    # Remove these method stubs if you decide not to use them.               #
-    # Change this method in any way you'd like.                              #
+        flag_remove = None
+        parent_remove = None
+        node_remove = None
+        need_successor = None
+        flag = 'root'
+        prev = None
+        curr = self._root
+        while curr:
+            # go left
+            if value < curr.value or need_successor:  # include condition in case we need to continue left
+                # if we have established we need the inorder successor
+                if need_successor:
+                    if curr.left is None:
+                        # now we know the parent and the inorder successor
+                        parent_successor = prev
+                        # prev will be the inorder successor
+                        prev = curr
+                        break
 
-    def _remove_two_subtrees(self, remove_parent: AVLNode, remove_node: AVLNode) -> AVLNode:
-        """
-        TODO: Write your implementation
-        """
-        pass
+                    else:  # there is a left child of the right child
+                        # keep going left, tracking 3 nodes
+                        parent_successor = prev
+                        prev = curr  # prev will be the inorder successor
+                        curr = curr.left
+
+                else:
+                    prev = curr
+                    curr = prev.left
+                    flag = 'left'
+            # go right
+            elif value > curr.value:
+                prev = curr
+                curr = prev.right
+                flag = 'right'
+
+            # if curr.value equals value, we have found the node
+            # if node only has one left child, replace node with its left subtree
+            elif curr.value == value and (curr.left and curr.right is None):
+                if flag == 'left':
+                    prev.left = curr.left
+                    # assign parent_remove for rebalancing
+                    parent_remove = prev
+                    while parent_remove is not None:
+                        self._rebalance(parent_remove)
+                        parent_remove = parent_remove.parent
+
+                elif flag == 'right':
+                    prev.right = curr.left
+                    # assign parent_remove for rebalancing
+                    parent_remove = prev
+                    while parent_remove is not None:
+                        self._rebalance(parent_remove)
+                        parent_remove = parent_remove.parent
+
+                else:  # flag equals 'root'
+                    self._root = curr.left
+                return True
+            # if node has one right child, replace node with its right subtree
+            elif curr.value == value and (curr.right and curr.left is None):
+                if flag == 'left':
+                    prev.left = curr.right
+                    # assign parent_remove for rebalancing
+                    parent_remove = prev
+                    while parent_remove is not None:
+                        self._rebalance(parent_remove)
+                        parent_remove = parent_remove.parent
+
+                elif flag == 'right':
+                    prev.right = curr.right
+                    # assign parent_remove for rebalancing
+                    parent_remove = prev
+                    while parent_remove is not None:
+                        self._rebalance(parent_remove)
+                        parent_remove = parent_remove.parent
+
+                else:
+                    self._root = curr.right
+                    parent_remove = curr.parent
+                    while parent_remove is not None:
+                        self._rebalance(parent_remove)
+                        parent_remove = parent_remove.parent
+                return True
+            # if node has no children
+            elif curr.value == value and (curr.right is None and curr.left is None):
+                if flag == 'left':
+                    prev.left = curr.right
+                    # assign parent_remove for rebalancing
+                    parent_remove = prev
+                    while parent_remove is not None:
+                        self._rebalance(parent_remove)
+                        parent_remove = parent_remove.parent
+
+                elif flag == 'right':
+                    prev.right = curr.right
+                    # assign parent_remove for rebalancing
+                    parent_remove = prev
+                    while parent_remove is not None:
+                        self._rebalance(parent_remove)
+                        parent_remove = parent_remove.parent
+
+                else:
+                    self._root = curr.right
+                    parent_remove = curr.parent
+                    while parent_remove is not None:
+                        self._rebalance(parent_remove)
+                        parent_remove = parent_remove.parent
+                return True
+
+            # if node has two children, replace it with its inorder successor, start at node.right then CONTINUE LEFT DOWN THE TREE
+            elif curr.value == value and (curr.left and curr.right):
+
+                if curr.right.left is None:
+                    if curr == self._root:
+                        replacement_node = curr.right
+                        # print(replacement_node)
+                        replacement_node.left = curr.left
+                        curr.right = None
+                        curr.left = None
+                        replacement_node.left.parent = replacement_node
+                        self._root = replacement_node
+                        replacement_node.parent = curr.parent
+                        self._rebalance(replacement_node)
+                        return True
+
+                    elif flag == 'left':
+                        replacement_node = curr.right
+                        prev.left = replacement_node
+                        replacement_node.left = curr.left
+                        # assign parent_remove for rebalancing
+
+                        # TODO parent_remove = curr.parent
+                        replacement_node.parent = curr.parent
+                        # curr.parent = None
+                        # curr.right = None
+                        # curr.left = None
+
+                        parent_remove = replacement_node
+
+                        while parent_remove is not None:
+                            self._rebalance(parent_remove)
+                            parent_remove = parent_remove.parent
+
+                        return True
+
+                    elif flag == 'right':
+                        replacement_node = curr.right
+                        prev.right = replacement_node
+                        replacement_node.left = curr.left
+                        # assign parent_remove for rebalancing
+
+                        # TODO parent_remove = curr.parent
+                        replacement_node.parent = curr.parent
+                        # curr.parent = None
+                        # curr.right = None
+                        # curr.left = None
+
+                        parent_remove = replacement_node
+                        while parent_remove is not None:
+                            self._rebalance(parent_remove)
+                            parent_remove = parent_remove.parent
+                        return True
+
+                # if there is a curr.right.left, look for inorder successor
+                need_successor = True
+                parent_remove = prev
+                node_remove = curr
+                flag_remove = flag
+                prev = curr.right
+                curr = curr.right.left
+                parent_successor = None
+
+        if need_successor:
+            inorder_successor = prev
+            # if inorder successor has a right node, update its parent.left points to it
+            if inorder_successor.right:
+                parent_successor.left = inorder_successor.right
+                inorder_successor.right.parent = parent_successor
+                # parent_successor.parent = inorder_successor # check back?
+            else:
+                parent_successor.left = None
+                # parent_successor.parent = inorder_successor  # check back
+
+            # update inorder successor pointers - also the parent pointer
+            inorder_successor.right = node_remove.right
+            inorder_successor.left = node_remove.left
+            inorder_successor.parent = node_remove.parent
+            # check this
+            if inorder_successor.left is not None:
+                inorder_successor.left.parent = inorder_successor
+            if inorder_successor.right is not None:
+                inorder_successor.right.parent = inorder_successor
+
+            # check which side we moved and assign the parent node of the removed node to the inorder succcessor
+            # need to update parents?
+            # if node to be removed is the root
+            if node_remove == self._root:
+                self._root = inorder_successor
+                node_remove.right.parent = inorder_successor
+                node_remove.left.parent = inorder_successor
+
+            elif flag_remove == 'right':
+                parent_remove.right = inorder_successor
+
+            elif flag_remove == 'left':
+                parent_remove.left = inorder_successor
+                node_remove.left.parent = inorder_successor  # check back
+
+            # update node_remove properties
+            node_remove.left = None
+            node_remove.right = None
+            node_remove.parent = None  # TODO: Changed
+
+            # assign parent_remove for rebalancing
+            parent_remove = parent_successor  # TODO: CHANGED for rebalancing, but program crashes now
+            while parent_remove is not None:
+                self._rebalance(parent_remove)
+                parent_remove = parent_remove.parent
+            return True
+        return False
+
 
     # It's highly recommended to implement                          #
     # the following methods for balancing the AVL Tree.             #
@@ -133,39 +401,137 @@ class AVL(BST):
 
     def _balance_factor(self, node: AVLNode) -> int:
         """
-        TODO: Write your implementation
+        Determine if subtree rooted at a node is height balanced
+        Difference in height between right subtree and left subtree
+        Balanced if -1, 1, or 0
+        Note: NULL nodes have a height of -1, thus every leaf node will have a balance factor of 0
+        ex: -1 - (-1) = 0
         """
-        pass
+        if not node:
+            return 0
+
+        return self._get_height(node.right) - self._get_height(node.left)
 
     def _get_height(self, node: AVLNode) -> int:
         """
-        TODO: Write your implementation
+        Determine height of a node's subtree
         """
-        pass
+        if not node:
+            return -1
+
+        return node.height
 
     def _rotate_left(self, node: AVLNode) -> AVLNode:
         """
-        TODO: Write your implementation
+        Perform a left rotation at the given node
         """
-        pass
+        c = node.right
+        node.right = c.left
+        if node.right is not None:
+            node.right.parent = node
+        c.left = node
+        node.parent = c
+        self._update_height(node)
+        self._update_height(c)
+        return c
 
     def _rotate_right(self, node: AVLNode) -> AVLNode:
         """
-        TODO: Write your implementation
+        Perform a right roatation at the given node
         """
-        pass
+        c = node.left
+        node.left = c.right
+        if node.left is not None:
+            node.left.parent = node
+        c.right = node
+        node.parent = c
+        self._update_height(node)
+        self._update_height(c)
+        return c
 
     def _update_height(self, node: AVLNode) -> None:
         """
-        TODO: Write your implementation
+        Update the height property of the given node
         """
-        pass
+        node.height = max(self._get_height(node.left), self._get_height(node.right)) + 1
 
     def _rebalance(self, node: AVLNode) -> None:
         """
-        TODO: Write your implementation
+        Rebalance the subtrees of the given node
         """
-        pass
+        node_parent = node.parent
+        if self._balance_factor(node) < - 1:
+            if self._balance_factor(node.left) > 0:
+                node.left = self._rotate_left(node.left)
+                node.left.parent = node
+            new_subtree_root = self._rotate_right(node)
+            new_subtree_root.parent = node_parent
+            # node.parent.left or node.parent.right = new_subtree_root
+            if node == self._root or node_parent is None:
+                self._root = new_subtree_root
+            elif node == node_parent.left:
+                node_parent.left = new_subtree_root
+            else:
+                node_parent.right = new_subtree_root
+
+        elif self._balance_factor(node) > 1:
+            if self._balance_factor(node.right) < 0:
+                node.right = self._rotate_right(node.right)
+                node.right.parent = node
+            new_subtree_root = self._rotate_left(node)
+            new_subtree_root.parent = node_parent
+            # node.parent.left or node.parent.right = new_subtree_root
+            if node == self._root or node_parent is None:
+                self._root = new_subtree_root
+            elif node == node_parent.left:
+                node_parent.left = new_subtree_root
+            else:
+                node_parent.right = new_subtree_root
+
+        else:
+            self._update_height(node)
+
+    # comment out or delete before submission
+    def find_max(self) -> object:
+        """
+        Returns the highest value in the tree. If the tree is empty, the method should
+        return None. It must be implemented with O(N) runtime complexity.
+        """
+        if self._root is None:
+            return None
+        prev = None
+        curr = self._root
+        while curr:
+            prev = curr
+            curr = curr.right
+        return prev, prev.value
+
+    # comment out or delete before submission
+    def contains(self, value: object) -> AVLNode:
+        """
+        Returns True if the value is in the tree. Otherwise, it returns False. If the tree is
+        empty, the method should return False. It must be implemented with O(N) runtime
+        complexity.
+        """
+        if self._root is None:
+            return
+
+        curr = self._root
+
+        while curr:
+            # go left
+            if value < curr.value:
+                prev = curr
+                curr = prev.left
+            # go right
+            elif value > curr.value:
+                prev = curr
+                curr = prev.right
+
+            else:
+                return curr
+        return f'No node with {value}'
+
 
 # ------------------- BASIC TESTING -----------------------------------------
 
@@ -187,10 +553,10 @@ if __name__ == '__main__':
     print("\nPDF - method add() example 2")
     print("----------------------------")
     test_cases = (
-        (10, 20, 30, 40, 50),   # RR, RR
-        (10, 20, 30, 50, 40),   # RR, RL
-        (30, 20, 10, 5, 1),     # LL, LL
-        (30, 20, 10, 1, 5),     # LL, LR
+        (10, 20, 30, 40, 50),  # RR, RR
+        (10, 20, 30, 50, 40),  # RR, RL
+        (30, 20, 10, 5, 1),  # LL, LL
+        (30, 20, 10, 1, 5),  # LL, LR
         (5, 4, 6, 3, 7, 2, 8),  # LL, RR
         (range(0, 30, 3)),
         (range(0, 31, 3)),
