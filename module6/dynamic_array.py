@@ -75,6 +75,9 @@ class DynamicArray:
             raise DynamicArrayException
         return self._data[index]
 
+    def get_data(self):
+        return self._data
+
     def set_at_index(self, index: int, value: object) -> None:
         """
         Store value at given index in the array
@@ -121,6 +124,16 @@ class DynamicArray:
         DO NOT CHANGE THIS METHOD IN ANY WAY
         """
         return self._capacity
+
+    def decrement_size(self):
+        self._size -= 1
+
+    def change_size(self, num):
+        self._size += num
+
+    def pop(self):
+        self._data[self.length() - 1] = None
+        self._size -= 1
 
     def print_da_variables(self) -> None:
         """
