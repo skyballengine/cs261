@@ -51,29 +51,45 @@ class Assignment6Tester(unittest.TestCase):
 
     def test_next_prime_c(self):
         h = HashMap()
-        print(h._next_prime(23 + 2))
+        print(h._next_prime(23))
     def test_resize_table_c(self):
-        print("\nPDF - resize example 2")
-        print("----------------------")
-        m = HashMap(79, hash_function_2)
-        keys = [i for i in range(1, 1000, 13)]
-        for key in keys:
-            m.put(str(key), key * 42)
-        print(m.get_size(), m.get_capacity())
+        # print("\nPDF - resize example 1")
+        # print("----------------------")
+        # m = HashMap(23, hash_function_1)
+        # m.put('key1', 10)
+        # print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
+        # m.resize_table(30)
+        # print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
 
-        for capacity in range(111, 1000, 117):
-            m.resize_table(capacity)
+        # print("\nPDF - resize example 2")
+        # print("----------------------")
+        # m = HashMap(79, hash_function_2)
+        # keys = [i for i in range(1, 1000, 13)]
+        # for key in keys:
+        #     m.put(str(key), key * 42)
+        # print(m.get_size(), m.get_capacity())
+        #
+        # for capacity in range(111, 1000, 117):
+        #     m.resize_table(capacity)
+        #
+        #     m.put('some key', 'some value')
+        #     result = m.contains_key('some key')
+        #     m.remove('some key')
+        #
+        #     for key in keys:
+        #         # all inserted keys must be present
+        #         result &= m.contains_key(str(key))
+        #         # NOT inserted keys must be absent
+        #         result &= not m.contains_key(str(key + 1))
+        #     print(capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2))
+        m = HashMap(23)
+        new_capacity = 1
+        while new_capacity < m._capacity or not m._is_prime(new_capacity):
+            new_capacity = m._next_prime(new_capacity * 2)
+            print(new_capacity)
+        m._capacity = new_capacity
+        print(m._capacity)
 
-            m.put('some key', 'some value')
-            result = m.contains_key('some key')
-            m.remove('some key')
-
-            for key in keys:
-                # all inserted keys must be present
-                result &= m.contains_key(str(key))
-                # NOT inserted keys must be absent
-                result &= not m.contains_key(str(key + 1))
-            print(capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2))
 
     def test_get_c(self):
         print("\nPDF - get example 1")
@@ -120,7 +136,37 @@ class Assignment6Tester(unittest.TestCase):
         pass
 
     def test_find_mode_c(self):
-        da =
+        # print("\nPDF - find_mode example 1")
+        # print("-----------------------------")
+        # da = DynamicArray(["apple", "apple", "grape", "melon", "peach"])
+        # print(find_mode(da))
+        # # print(f"Input: {da}\nMode : {mode}, Frequency: {frequency}")
+
+        # print("\nPDF - find_mode example 2")
+        # print("-----------------------------")
+        # test_cases = (
+        #     ["Arch", "Manjaro", "Manjaro", "Mint", "Mint", "Mint", "Ubuntu", "Ubuntu", "Ubuntu"],
+        #     ["one", "two", "three", "four", "five"],
+        #     ["2", "4", "2", "6", "8", "4", "1", "3", "4", "5", "7", "3", "3", "2"]
+        # )
+        #
+        # for case in test_cases:
+        #     da = DynamicArray(case)
+        #     print(find_mode(da))
+
+        print("\nPDF - find_mode example 2")
+        print("-----------------------------")
+        test_cases = (
+            ["Arch", "Manjaro", "Manjaro", "Mint", "Mint", "Mint", "Ubuntu", "Ubuntu", "Ubuntu"],
+            ["one", "two", "three", "four", "five"],
+            ["2", "4", "2", "6", "8", "4", "1", "3", "4", "5", "7", "3", "3", "2"]
+        )
+
+        for case in test_cases:
+            da = DynamicArray(case)
+            mode, frequency = find_mode(da)
+            print(f"Input: {da}\nMode : {mode}, Frequency: {frequency}\n")
+
 
     def test_hash_function_1(self):
         hash = hash_function_1('str1')

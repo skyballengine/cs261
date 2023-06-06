@@ -87,67 +87,93 @@ class HashMap:
 
     def put(self, key: str, value: object) -> None:
         """
-        TODO: Write this implementation
+        Updates the key/value pair in the hash map. If the given key already exists in
+        the hash map, its associated value must be replaced with the new value. If the given key is
+        not in the hash map, a new key/value pair must be added.
+
+        For this hash map implementation, the table must be resized to double its current
+        capacity when this method is called and the current load factor of the table is
+        greater than or equal to 0.5.
         """
         pass
 
     def table_load(self) -> float:
         """
-        TODO: Write this implementation
+        Returns the current hash table load factor.
         """
         pass
 
     def empty_buckets(self) -> int:
         """
-        TODO: Write this implementation
+        Returns the number of empty buckets in the hash table.
         """
         pass
 
     def resize_table(self, new_capacity: int) -> None:
         """
-        TODO: Write this implementation
+        Changes the capacity of the internal hash table. All existing key/value pairs
+        must remain in the new hash map, and all hash table links must be rehashed.
+        First check that new_capacity is not less than the current number of elements in the hash
+        map; if so, the method does nothing.
+
+        If new_capacity is valid, make sure it is a prime number; if not, change it to the next
+        highest prime number. You may use the methods _is_prime() and _next_prime() from the
+        skeleton code.
         """
         pass
 
     def get(self, key: str) -> object:
         """
-        TODO: Write this implementation
+        Returns the value associated with the given key. If the key is not in the hash
+        map, the method returns None.
         """
         pass
 
     def contains_key(self, key: str) -> bool:
         """
-        TODO: Write this implementation
+        Returns True if the given key is in the hash map, otherwise it returns False. An
+        empty hash map does not contain any keys.
         """
         pass
 
     def remove(self, key: str) -> None:
         """
-        TODO: Write this implementation
+        Removes the given key and its associated value from the hash map. If the key
+        is not in the hash map, the method does nothing (no exception needs to be raised).
         """
         pass
 
     def clear(self) -> None:
         """
-        TODO: Write this implementation
+        Clears the contents of the hash map. It does not change the underlying hash
+        table capacity.
         """
         pass
 
     def get_keys_and_values(self) -> DynamicArray:
         """
-        TODO: Write this implementation
+        Returns a dynamic array where each index contains a tuple of a key/value pair
+        stored in the hash map. The order of the keys in the dynamic array does not matter.
         """
         pass
 
     def __iter__(self):
         """
-        TODO: Write this implementation
+        Enables the hash map to iterate across itself. Implement this method in a
+        similar way to the example in the Exploration: Encapsulation and Iterators.
+        You ARE permitted (and will need to) initialize a variable to track the iterator’s progress
+        through the hash map’s contents.
+
+        You can use either of the two models demonstrated in the Exploration - you can build the
+        iterator functionality inside the HashMap class, or you can create a separate iterator class.
         """
         pass
 
     def __next__(self):
         """
-        TODO: Write this implementation
+        Return the next item in the hash map, based on the current location of the
+        iterator. Implement this method in a similar way to the example in the Exploration:
+        Encapsulation and Iterators. It will need to only iterate over active items.
         """
         pass
 

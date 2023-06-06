@@ -86,6 +86,12 @@ class HashMap:
         """
         return self._capacity
 
+    def get_buckets(self) -> DynamicArray:
+        """
+        Return underlying DynamicArray
+        """
+        return self._buckets
+
     # ------------------------------------------------------------------ #
 
     def put(self, key: str, value: object) -> None:
@@ -161,11 +167,40 @@ class HashMap:
         if new_capacity < 1:
             return
 
+        # while new_capacity < self._capacity or not self._is_prime(new_capacity):
+        #     new_capacity = self._next_prime(new_capacity * 2)
+        #
+        # self._capacity = new_capacity
+
+        # # same condition as in put()
+        # if self.table_load() >= 1:
+        #     self._capacity = self._next_prime(new_capacity)
+        # #
+        # # else:
+        # #     while new_capacity < self._capacity or not self._is_prime(new_capacity):
+        # #         new_capacity = self._next_prime(new_capacity * 2)
+        # #     self._capacity = new_capacity
+        #
+        # # check if new_capacity is prime, if so assign as self._capacity
+        # if self._is_prime(new_capacity):
+        #     # new_prime_capacity = self._next_prime(new_capacity)
+        #     # resize creating a new hash table with new capacity and old values
+        #     self._capacity = new_capacity
+        # # validation for using resize independently of put
+        # else:
+        #     self._capacity = self._next_prime(new_capacity)
+
+        # # same condition as in put()
+        if self.table_load() >= 1:
+            self._capacity = self._next_prime(new_capacity)
+        #
+        # else:
+        #     while new_capacity < self._capacity or not self._is_prime(new_capacity):
+        #         new_capacity = self._next_prime(new_capacity * 2)
+        #     self._capacity = new_capacity
+
         # check if new_capacity is prime, if so assign as self._capacity
-        if self._is_prime(new_capacity):
-            # new_prime_capacity = self._next_prime(new_capacity)
-            # resize creating a new hash table with new capacity and old values
-            self._capacity = new_capacity
+        # validation for using resize independently of put
         else:
             self._capacity = self._next_prime(new_capacity)
 
@@ -223,7 +258,6 @@ class HashMap:
         # print(f'Dynamic Array Length: {self._buckets.length()}')
         # print(f'self._capacity: {self._capacity}')
 
-
     def get(self, key: str) -> object:
         """
         Returns the value associated with the given key. If the key is not in the hash
@@ -274,7 +308,6 @@ class HashMap:
             linked_list.remove(key)
             self._size -= 1
 
-
     def get_keys_and_values(self) -> DynamicArray:
         """
         Returns a dynamic array where each index contains a tuple of a key/value pair
@@ -308,8 +341,12 @@ def find_mode(da: DynamicArray) -> (DynamicArray, int):
 
     # if you'd like to use a hash map,
     # use this instance of your Separate Chaining HashMap
-    mode_map = HashMap()
-    mode_map_buckets = mode_map._buckets
+    mode_map = HashMap(capacity=da.length())
+    mode_map_buckets = mode_map.get_buckets()
+
+    # # if necessary resize table
+    # if mode_map.table_load() >= 1:
+    #     mode_map.resize_table(mode_map.get_capacity() * 2)
 
     # create a da for storing the mode(s) of the original da will return at the end of the function
     mode_da = DynamicArray()
@@ -319,25 +356,33 @@ def find_mode(da: DynamicArray) -> (DynamicArray, int):
         mode_da.append(da[0])
         return mode_da, 1
 
-    # add all values from da into HashMap
+    # need a new put operation that inserts a new SLNode with new key
+    # or increments the value of the SLNode with existing key
+
+    # add all values from da into HashMap by key incrementing the value in the node each time key is overwritten
     for i in range(da.length()):
-        mode_map.put(str(da[i]), da[i])  # TODO: does this just overwrite and not add multiple values?
+        arr_index = hash_function_1(da[i]) % mode_map.get_capacity()
+        linked_list = mode_map_buckets[arr_index]
+        node_value = mode_map.get(da[i]) if linked_list.contains(da[i]) else 1
+        node = linked_list.contains(da[i])
 
-    # loop through the HashMap and find the longest value of the indexes linked list
+        if node:
+            node.value = node_value + 1
+
+        else:
+            linked_list.insert(da[i], node_value)
+
     mode_count = 0
-    for j in range(mode_map.get_capacity()):
-        if mode_map_buckets[j].length() > mode_count:
-            mode_count = mode_map_buckets[j].length()
+    keys_and_values_da = mode_map.get_keys_and_values()
+    for j in range(keys_and_values_da.length()):
+        if keys_and_values_da[j][1] > mode_count:
+            mode_count = keys_and_values_da[j][1]
 
-    for k in range(mode_map.get_capacity()):
-        if mode_map_buckets[k].length() == mode_count:
-            ll_iterator = iter(mode_map_buckets[k])
-            mode_da.append(next(ll_iterator).value)
+    for k in range(keys_and_values_da.length()):
+        if keys_and_values_da[k][1] == mode_count:
+            mode_da.append(keys_and_values_da[k][0])
 
-
-
-
-
+    return mode_da, mode_count
 
 
 
