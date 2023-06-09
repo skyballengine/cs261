@@ -191,8 +191,19 @@ class HashMap:
         #     self._capacity = self._next_prime(new_capacity)
 
         # # same condition as in put()
+        # TODO: Version2
         if self.table_load() >= 1:
             self._capacity = self._next_prime(new_capacity)
+            while self._capacity < self._size:
+                self._capacity = self._next_prime(self._capacity * 2)
+
+        # TODO: Version1
+        # if self.table_load() >= 1:
+        #     self._capacity = self._next_prime(new_capacity)
+
+
+
+
         #
         # else:
         #     while new_capacity < self._capacity or not self._is_prime(new_capacity):
@@ -201,8 +212,20 @@ class HashMap:
 
         # check if new_capacity is prime, if so assign as self._capacity
         # validation for using resize independently of put
+        # TODO: Version2
         else:
-            self._capacity = self._next_prime(new_capacity)
+            if new_capacity == 2:
+                self._capacity = self._next_prime(new_capacity * 2)
+                while self._capacity < self._size:
+                    self._capacity = self._next_prime(self._capacity * 2)
+            else:
+                self._capacity = self._next_prime(new_capacity)
+                while self._capacity < self._size:
+                    self._capacity = self._next_prime(self._capacity * 2)
+
+        # TODO: Version1
+        # else:
+        #     self._capacity = self._next_prime(new_capacity)
 
         new_da = DynamicArray()
         for _ in range(self._capacity):

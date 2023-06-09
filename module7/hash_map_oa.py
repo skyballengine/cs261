@@ -95,19 +95,114 @@ class HashMap:
         capacity when this method is called and the current load factor of the table is
         greater than or equal to 0.5.
         """
-        pass
+        # # check table load and resize if necessary
+        if self.table_load() >= 0.5:
+            self.resize_table(self._capacity * 2)
+
+        # get the index based on the hash of key
+        arr_index = self._hash_function(key) % self._capacity
+        # print(self._hash_function)
+
+        # TODO: Version 2
+
+        # add if spot is empty
+        if self._buckets[arr_index] is None:
+            self._buckets.set_at_index(arr_index, HashEntry(key, value))
+            self._size += 1
+
+        # if element has a tombstone property that's true overwrite with new HashEntry
+        elif self._buckets[arr_index].is_tombstone:
+            self._buckets.set_at_index(arr_index, HashEntry(key, value))
+            self._buckets[arr_index].is_tombstone = False
+            self._size += 1
+
+        # if key of element at index is equal to key
+        elif self._buckets[arr_index].key == key:
+            self._buckets[arr_index].value = value
+            if self._buckets[arr_index].is_tombstone:
+                self._buckets[arr_index].is_tombstone = False
+                self._size += 1
+
+        elif self._buckets[arr_index].key != key:
+            j = 1
+            new_arr_index = arr_index
+            while self._buckets[new_arr_index] is not None:
+                if self._buckets[new_arr_index].key == key:
+                    self._buckets[new_arr_index].value = value
+                    if self._buckets[new_arr_index].is_tombstone:
+                        self._buckets[new_arr_index].is_tombstone = False
+                        self._size += 1
+                    return
+                new_arr_index = (arr_index + (j ** 2)) % self._capacity
+                j += 1
+            self._buckets.set_at_index(new_arr_index, HashEntry(key, value))
+            self._size += 1
+
+        # TODO: Current version
+        # while loop for adding value stepping through conditions each time new index
+        # new_arr_index = arr_index
+        # if self._buckets[arr_index] is not None:
+        #     new_arr_index += 1
+        # j = 1
+        # while True:
+        #     # add if spot is empty
+        #     if self._buckets[arr_index] is None:
+        #         self._buckets.set_at_index(arr_index, HashEntry(key, value))
+        #         self._size += 1
+        #         break
+        #
+        #     # if element has a tombstone property that's true overwrite with new HashEntry
+        #     elif self._buckets[arr_index].is_tombstone:
+        #         self._buckets.set_at_index(arr_index, HashEntry(key, value))
+        #         break
+        #
+        #     # if key of element at index is equal to key
+        #     elif self._buckets[arr_index].key == key:
+        #         self._buckets[arr_index].value = value
+        #         break
+        #
+        #     elif self._buckets[arr_index].key != key:
+        #         arr_index = (arr_index + (j ** 2)) % self._capacity
+        #         j += 1
+
+        # TODO: OLD erase when things work
+        # # # check table load and resize if necessary
+        # if round(self.table_load(), 2) >= 0.5:
+        #     self.resize_table(self._capacity * 2)
+        #
+        # # get the index based on the hash of key
+        # arr_index = self._hash_function(key) % self._capacity
+        #
+        # # if no value exists at index, insert value at index
+        # if self._buckets[arr_index] is None:
+        #     self._buckets.set_at_index(arr_index, HashEntry(key, value))
+        #     self._size += 1
+        #
+        # # else replace
+        # else:
+        #     if self._buckets[arr_index].key == key:
+        #         self._buckets[arr_index].value = value
+        #
+        #     elif self._buckets[arr_index].key != key:
+        #         j = 1
+        #         new_arr_index = arr_index
+        #         while self._buckets[new_arr_index] is not None:
+        #             new_arr_index = (arr_index + j ** 2) % self._capacity
+        #             j += 1
+        #         self._buckets.set_at_index(new_arr_index, HashEntry(key, value))
+        #         self._size += 1
 
     def table_load(self) -> float:
         """
         Returns the current hash table load factor.
         """
-        pass
+        return self._size / self._capacity
 
     def empty_buckets(self) -> int:
         """
         Returns the number of empty buckets in the hash table.
         """
-        pass
+        return self._capacity - self._size
 
     def resize_table(self, new_capacity: int) -> None:
         """
@@ -120,42 +215,168 @@ class HashMap:
         highest prime number. You may use the methods _is_prime() and _next_prime() from the
         skeleton code.
         """
-        pass
+        # if new capacity is less than current number of elements, return
+        if new_capacity < self._size:
+            return
+
+        # if round(self.table_load(), 2) < 0.5:
+        #     return
+
+        # if new_capacity is not prime, make it the next prime number
+        if not self._is_prime(new_capacity):
+            new_capacity = self._next_prime(new_capacity)
+
+        # # need old capacity for hashing existing key, value pairs in self._buckets
+        old_capacity = self._capacity
+
+        # assign new_capacity to self._capacity
+        self._capacity = new_capacity
+
+        # get key-value da for rehashing into cleared table
+        key_value_da = self.get_keys_and_values()
+        # print(f'\nKey and Value DA: \n{key_value_da}')
+
+        # clear hash table and resize the da with correct capacity
+        # print(f'\nPre Cleared HashMap: \n{self}')
+        self.clear()
+
+        # TODO: is this right?
+        new_da = DynamicArray()
+        for i in range(self._capacity):
+            new_da.append(None)
+        self._buckets = new_da
+        # print(f'\nPost Cleared HashMap: \n{self}')
+        len_buckets = self._buckets.length()
+        len_capacity = self._capacity
+        num = self._capacity - self._buckets.length()
+
+        # TODO: does nothing?
+        for _ in range(self._capacity - self._buckets.length()):
+            self._buckets.append(None)
+
+
+        # print(f'\nNew Capacity: {self._capacity}')
+        # print(f'New DA length: {self._buckets.length()}')
+
+        # copy elements over from old da to new da - REMEMBER TO REHASH PROPERLY
+        for i in range(key_value_da.length()):
+            p_key = key_value_da[i][0]
+            p_value = key_value_da[i][1]
+            # p_tombstone = key_value_da[i].is_tombstone
+            # old_hash = self._hash_function(p_key) % old_capacity
+            new_hash = self._hash_function(p_key) % self._capacity
+            # print(self._hash_function)
+            # print(f'\nKey: {p_key}')
+            # print(f'Old Hash: {old_hash}')
+            # print(f'New Hash: {new_hash}')
+            # self._buckets.set_at_index(new_hash, HashEntry(p_key, p_value))
+            self.put(p_key, p_value)
+
+        # print(f'\nFinal HashMap: {self}')
 
     def get(self, key: str) -> object:
         """
         Returns the value associated with the given key. If the key is not in the hash
         map, the method returns None.
         """
-        pass
+        # hash key for index
+        key_index = self._hash_function(key) % self._capacity
+        if self._buckets[key_index] is None:
+            return
+
+        probing_key_index = key_index
+        j = 1
+        while True:
+            if self._buckets[probing_key_index] is None:
+                return
+
+            elif self._buckets[probing_key_index].key != key:
+                probing_key_index = (key_index + (j ** 2)) % self._capacity
+                j += 1
+
+            else:
+                if self._buckets[probing_key_index].is_tombstone:
+                    print('Tombstone!')
+                    return
+                else:
+                    return self._buckets[probing_key_index].value
 
     def contains_key(self, key: str) -> bool:
         """
         Returns True if the given key is in the hash map, otherwise it returns False. An
         empty hash map does not contain any keys.
         """
-        pass
+        # hash key for index
+        key_index = self._hash_function(key) % self._capacity
+
+        # return false if index is empty
+        if self._buckets[key_index] is None:
+            return False
+
+        probing_key_index = key_index
+        j = 1
+        while True:
+            if self._buckets[probing_key_index] is not None and self._buckets[probing_key_index].key != key:
+                probing_key_index = (key_index + (j ** 2)) % self._capacity
+                j += 1
+            elif self._buckets[probing_key_index] is not None and self._buckets[probing_key_index].key == key:
+                if self._buckets[probing_key_index].is_tombstone:
+                    return False
+                else:
+                    return True
+            else:
+                return False
+
+
+        # TODO: Current Version
+        # key_index = self._hash_function(key) % self._capacity
+        # if self._buckets[key_index] is None:
+        #     return False
+        # return True
 
     def remove(self, key: str) -> None:
         """
         Removes the given key and its associated value from the hash map. If the key
         is not in the hash map, the method does nothing (no exception needs to be raised).
         """
-        pass
+        if not self.contains_key(key):
+            return
+
+        key_index = self._hash_function(key) % self._capacity
+        probing_key_index = key_index
+        j = 1
+        while True:
+            if self._buckets[probing_key_index] is None:
+                return
+            elif self._buckets[probing_key_index].key != key:
+                probing_key_index = (key_index + (j ** 2)) % self._capacity
+                j += 1
+            else:
+                self._buckets[probing_key_index].is_tombstone = True
+                self._size -= 1
+                return
 
     def clear(self) -> None:
         """
         Clears the contents of the hash map. It does not change the underlying hash
         table capacity.
         """
-        pass
+        for i in range(self._buckets.length()):
+            self._buckets[i] = None
+        self._size = 0
 
     def get_keys_and_values(self) -> DynamicArray:
         """
         Returns a dynamic array where each index contains a tuple of a key/value pair
         stored in the hash map. The order of the keys in the dynamic array does not matter.
         """
-        pass
+        new_da = DynamicArray()
+
+        for i in range(self._buckets.length()):
+            if self._buckets[i] is not None and not self._buckets[i].is_tombstone:
+                new_da.append((self._buckets[i].key, self._buckets[i].value))
+
+        return new_da
 
     def __iter__(self):
         """
@@ -167,7 +388,8 @@ class HashMap:
         You can use either of the two models demonstrated in the Exploration - you can build the
         iterator functionality inside the HashMap class, or you can create a separate iterator class.
         """
-        pass
+        self._index = 0
+        return self
 
     def __next__(self):
         """
@@ -175,7 +397,23 @@ class HashMap:
         iterator. Implement this method in a similar way to the example in the Exploration:
         Encapsulation and Iterators. It will need to only iterate over active items.
         """
-        pass
+        try:
+            while self._buckets[self._index] is None or self._buckets[self._index].is_tombstone:
+                self._index += 1
+
+            try:
+                value = self._buckets[self._index]
+
+            except DynamicArrayException:
+                raise StopIteration
+
+            self._index += 1
+            return value
+
+        except DynamicArrayException:
+            raise StopIteration
+
+
 
 
 # ------------------- BASIC TESTING ---------------------------------------- #
