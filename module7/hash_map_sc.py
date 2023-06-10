@@ -167,52 +167,14 @@ class HashMap:
         if new_capacity < 1:
             return
 
-        # while new_capacity < self._capacity or not self._is_prime(new_capacity):
-        #     new_capacity = self._next_prime(new_capacity * 2)
-        #
-        # self._capacity = new_capacity
-
         # # same condition as in put()
-        # if self.table_load() >= 1:
-        #     self._capacity = self._next_prime(new_capacity)
-        # #
-        # # else:
-        # #     while new_capacity < self._capacity or not self._is_prime(new_capacity):
-        # #         new_capacity = self._next_prime(new_capacity * 2)
-        # #     self._capacity = new_capacity
-        #
-        # # check if new_capacity is prime, if so assign as self._capacity
-        # if self._is_prime(new_capacity):
-        #     # new_prime_capacity = self._next_prime(new_capacity)
-        #     # resize creating a new hash table with new capacity and old values
-        #     self._capacity = new_capacity
-        # # validation for using resize independently of put
-        # else:
-        #     self._capacity = self._next_prime(new_capacity)
-
-        # # same condition as in put()
-        # TODO: Version2
         if self.table_load() >= 1:
             self._capacity = self._next_prime(new_capacity)
             while self._capacity < self._size:
                 self._capacity = self._next_prime(self._capacity * 2)
 
-        # TODO: Version1
-        # if self.table_load() >= 1:
-        #     self._capacity = self._next_prime(new_capacity)
 
-
-
-
-        #
-        # else:
-        #     while new_capacity < self._capacity or not self._is_prime(new_capacity):
-        #         new_capacity = self._next_prime(new_capacity * 2)
-        #     self._capacity = new_capacity
-
-        # check if new_capacity is prime, if so assign as self._capacity
         # validation for using resize independently of put
-        # TODO: Version2
         else:
             if new_capacity == 2:
                 self._capacity = self._next_prime(new_capacity * 2)
@@ -222,10 +184,6 @@ class HashMap:
                 self._capacity = self._next_prime(new_capacity)
                 while self._capacity < self._size:
                     self._capacity = self._next_prime(self._capacity * 2)
-
-        # TODO: Version1
-        # else:
-        #     self._capacity = self._next_prime(new_capacity)
 
         new_da = DynamicArray()
         for _ in range(self._capacity):
@@ -247,39 +205,7 @@ class HashMap:
 
         self._buckets = new_da
 
-        # print(f'Dynamic Array Length: {self._buckets.length()}')
-        # print(f'self._capacity: {self._capacity}')
 
-        # # print(self._buckets)
-        # if new_capacity < 1:
-        #     return
-        # else:
-        #     # new_prime_capacity = self._next_prime(new_capacity)
-        #     # resize creating a new hash table with new capacity and old values
-        #
-        #     self._capacity = self._next_prime(new_capacity)
-        # new_da = DynamicArray()
-        # for _ in range(self._capacity):
-        #     # append a LinkedList for each iteration index 0 - self._capacity - 1
-        #     new_da.append(LinkedList())
-        # # for each index of the da length
-        # # for i in range(self._buckets.length()):
-        # for i in range(self._buckets.length()):
-        #     # if any nodes in the linked list?
-        #     if self._buckets[i].length() == 0:
-        #         continue
-        #     else:
-        #         ll_iterator = iter(self._buckets[i])
-        #         # rerun each key through the hash function
-        #         for j in range(self._buckets[i].length()):
-        #             node = next(ll_iterator)
-        #             new_hash_index = self._hash_function(node.key) % self._capacity
-        #             new_da[new_hash_index].insert(node.key, node.value)
-        #
-        # self._buckets = new_da
-        #
-        # print(f'Dynamic Array Length: {self._buckets.length()}')
-        # print(f'self._capacity: {self._capacity}')
 
     def get(self, key: str) -> object:
         """
@@ -368,8 +294,6 @@ def find_mode(da: DynamicArray) -> (DynamicArray, int):
     mode_map_buckets = mode_map.get_buckets()
 
     # # if necessary resize table
-    # if mode_map.table_load() >= 1:
-    #     mode_map.resize_table(mode_map.get_capacity() * 2)
 
     # create a da for storing the mode(s) of the original da will return at the end of the function
     mode_da = DynamicArray()

@@ -95,15 +95,13 @@ class HashMap:
         capacity when this method is called and the current load factor of the table is
         greater than or equal to 0.5.
         """
-        # # check table load and resize if necessary
+        # check table load and resize if necessary
         if self.table_load() >= 0.5:
             self.resize_table(self._capacity * 2)
 
         # get the index based on the hash of key
         arr_index = self._hash_function(key) % self._capacity
         # print(self._hash_function)
-
-        # TODO: Version 2
 
         # add if spot is empty
         if self._buckets[arr_index] is None:
@@ -137,60 +135,6 @@ class HashMap:
                 j += 1
             self._buckets.set_at_index(new_arr_index, HashEntry(key, value))
             self._size += 1
-
-        # TODO: Current version
-        # while loop for adding value stepping through conditions each time new index
-        # new_arr_index = arr_index
-        # if self._buckets[arr_index] is not None:
-        #     new_arr_index += 1
-        # j = 1
-        # while True:
-        #     # add if spot is empty
-        #     if self._buckets[arr_index] is None:
-        #         self._buckets.set_at_index(arr_index, HashEntry(key, value))
-        #         self._size += 1
-        #         break
-        #
-        #     # if element has a tombstone property that's true overwrite with new HashEntry
-        #     elif self._buckets[arr_index].is_tombstone:
-        #         self._buckets.set_at_index(arr_index, HashEntry(key, value))
-        #         break
-        #
-        #     # if key of element at index is equal to key
-        #     elif self._buckets[arr_index].key == key:
-        #         self._buckets[arr_index].value = value
-        #         break
-        #
-        #     elif self._buckets[arr_index].key != key:
-        #         arr_index = (arr_index + (j ** 2)) % self._capacity
-        #         j += 1
-
-        # TODO: OLD erase when things work
-        # # # check table load and resize if necessary
-        # if round(self.table_load(), 2) >= 0.5:
-        #     self.resize_table(self._capacity * 2)
-        #
-        # # get the index based on the hash of key
-        # arr_index = self._hash_function(key) % self._capacity
-        #
-        # # if no value exists at index, insert value at index
-        # if self._buckets[arr_index] is None:
-        #     self._buckets.set_at_index(arr_index, HashEntry(key, value))
-        #     self._size += 1
-        #
-        # # else replace
-        # else:
-        #     if self._buckets[arr_index].key == key:
-        #         self._buckets[arr_index].value = value
-        #
-        #     elif self._buckets[arr_index].key != key:
-        #         j = 1
-        #         new_arr_index = arr_index
-        #         while self._buckets[new_arr_index] is not None:
-        #             new_arr_index = (arr_index + j ** 2) % self._capacity
-        #             j += 1
-        #         self._buckets.set_at_index(new_arr_index, HashEntry(key, value))
-        #         self._size += 1
 
     def table_load(self) -> float:
         """
@@ -255,21 +199,11 @@ class HashMap:
             self._buckets.append(None)
 
 
-        # print(f'\nNew Capacity: {self._capacity}')
-        # print(f'New DA length: {self._buckets.length()}')
-
         # copy elements over from old da to new da - REMEMBER TO REHASH PROPERLY
         for i in range(key_value_da.length()):
             p_key = key_value_da[i][0]
             p_value = key_value_da[i][1]
-            # p_tombstone = key_value_da[i].is_tombstone
-            # old_hash = self._hash_function(p_key) % old_capacity
             new_hash = self._hash_function(p_key) % self._capacity
-            # print(self._hash_function)
-            # print(f'\nKey: {p_key}')
-            # print(f'Old Hash: {old_hash}')
-            # print(f'New Hash: {new_hash}')
-            # self._buckets.set_at_index(new_hash, HashEntry(p_key, p_value))
             self.put(p_key, p_value)
 
         # print(f'\nFinal HashMap: {self}')
@@ -326,13 +260,6 @@ class HashMap:
                     return True
             else:
                 return False
-
-
-        # TODO: Current Version
-        # key_index = self._hash_function(key) % self._capacity
-        # if self._buckets[key_index] is None:
-        #     return False
-        # return True
 
     def remove(self, key: str) -> None:
         """
